@@ -1,0 +1,30 @@
+version: '3.9'
+
+# Pemakaian: docker compose -f docker-compose.testnet.yml up -d
+# Service ini menjalankan toolchain Rust/Solana secara terisolasi dari container NestJS,
+# supaya log validator tidak bercampur dan proses bisa di-restart independen di CI.
+services:
+  solana-testnet:
+    image: solanalabs/solana:v1.18.15     # pin versi: pastikan cocok dengan versi Anchor program
+    container_name: climaledger-testnet
+    command: >
+      solana-test-validator
+      --ledger /ledger
+      --rpc-port 8899
+      --faucet-port 9900
+      --reset
+      --quiet
+    ports:
+      - '8899:8899'   # JSON-RPC, dipakai NestJS/@solana/web3.js
+      - '8900:8900'   # WebSocket RPC bawaan validator
+      - '9900:9900'   # Faucet airdrop
+    volumes:
+      - testnet-ledger:/ledger
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf -X POST -H 'content-type: application/json' -d '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"getHealth\"}' http://localhost:8899 | grep -q '\"result\":\"ok\"'"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  testnet-ledger:

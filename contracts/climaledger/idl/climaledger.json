@@ -1,0 +1,98 @@
+{
+  "version": "0.1.0",
+  "name": "climaledger",
+  "instructions": [
+    {
+      "name": "initializeBatch",
+      "accounts": [
+        { "name": "batchAccount", "isMut": true, "isSigner": false },
+        { "name": "mint", "isMut": false, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "batchId", "type": "string" },
+        { "name": "standard", "type": "string" },
+        { "name": "vintage", "type": "u16" },
+        { "name": "totalSupply", "type": "u64" }
+      ]
+    },
+    {
+      "name": "tokenizeCredit",
+      "accounts": [
+        { "name": "batchAccount", "isMut": true, "isSigner": false },
+        { "name": "mint", "isMut": true, "isSigner": false },
+        { "name": "recipientTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "recipient", "isMut": false, "isSigner": true },
+        { "name": "tokenProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "amount", "type": "u64" }
+      ]
+    },
+    {
+      "name": "listMarket",
+      "accounts": [
+        { "name": "listingAccount", "isMut": true, "isSigner": false },
+        { "name": "mint", "isMut": false, "isSigner": false },
+        { "name": "sellerTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "escrowVault", "isMut": true, "isSigner": false },
+        { "name": "seller", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false },
+        { "name": "tokenProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "amount", "type": "u64" },
+        { "name": "pricePerUnitUsdc", "type": "u64" }
+      ]
+    },
+    {
+      "name": "buyMarket",
+      "accounts": [
+        { "name": "listingAccount", "isMut": true, "isSigner": false },
+        { "name": "escrowVault", "isMut": true, "isSigner": false },
+        { "name": "buyerCarbonAccount", "isMut": true, "isSigner": false },
+        { "name": "buyerUsdcAccount", "isMut": true, "isSigner": false },
+        { "name": "sellerUsdcAccount", "isMut": true, "isSigner": false },
+        { "name": "buyer", "isMut": false, "isSigner": true },
+        { "name": "tokenProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "amount", "type": "u64" }
+      ]
+    },
+    {
+      "name": "retireCredit",
+      "accounts": [
+        { "name": "certificateAccount", "isMut": true, "isSigner": false },
+        { "name": "mint", "isMut": true, "isSigner": false },
+        { "name": "holderTokenAccount", "isMut": true, "isSigner": false },
+        { "name": "holder", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false },
+        { "name": "tokenProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "amount", "type": "u64" },
+        { "name": "beneficiary", "type": "string" },
+        { "name": "reason", "type": "string" }
+      ]
+    },
+    {
+      "name": "attestCompliance",
+      "accounts": [
+        { "name": "attestationAccount", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "companyId", "type": "string" },
+        { "name": "docHash", "type": "string" },
+        { "name": "isVerified", "type": "bool" }
+      ]
+    }
+  ],
+  "metadata": {
+    "address": "CLiMA1edgerCarbonCreditProgram1111111111111"
+  }
+}
+

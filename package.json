@@ -1,0 +1,16 @@
+{
+  "name": "climaledger-scaffold",
+  "version": "1.0.0",
+  "description": "ClimaLedger Fullstack Next.js & NestJS Solana Blockchain Platform",
+  "scripts": {
+    "start": "npm --prefix backend start",
+    "start:backend": "npm --prefix backend start",
+    "start:dev": "npm --prefix backend run start:dev",
+    "dev:backend": "npm --prefix backend run start:dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build:frontend": "npm --prefix frontend run build",
+    "start:frontend": "npm --prefix frontend start",
+    "install:backend": "npm --prefix backend install",
+    "install:frontend": "npm --prefix frontend install"
+  }
+}

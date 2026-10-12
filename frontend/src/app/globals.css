@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+::selection {
+  background: #A7F3D0;
+}
+
+.skel {
+  background: linear-gradient(90deg, #EEF2F7 25%, #F7FAFC 37%, #EEF2F7 63%);
+  background-size: 400% 100%;
+  animation: sk 1.4s ease-in-out infinite;
+}
+
+@keyframes sk {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+.spin {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 9999px;
+  animation: sp 0.7s linear infinite;
+  display: inline-block;
+}
+
+.spin.dk {
+  border-color: #CBD5E1;
+  border-top-color: #059669;
+}
+
+@keyframes sp {
+  to { transform: rotate(360deg); }
+}
+
+input[type=range].rng {
+  accent-color: #059669;
+}
+
+::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 8px;
+}
+

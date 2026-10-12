@@ -1,0 +1,172 @@
+# ==========================================
+# DEPENDENCIES — ANY DIRECTORY
+# ==========================================
+**/node_modules/
+**/bower_components/
+**/vendor/
+**/.pnp/
+**/.yarn/cache/
+
+# ==========================================
+# BUILD OUTPUT & DISTRIBUTIONS
+# ==========================================
+**/dist/
+**/build/
+**/out/
+**/output/
+**/target/
+**/release/
+**/debug/
+**/.next/
+**/.nuxt/
+**/.output/
+**/.angular/
+**/.svelte-kit/
+**/.vercel/output/
+**/storybook-static/
+
+# ==========================================
+# CACHE & TEMPORARY FILES
+# ==========================================
+**/.cache/
+**/.parcel-cache/
+**/.turbo/
+**/.eslintcache
+**/.stylelintcache
+**/.rpt2_cache/
+**/.rollup.cache/
+**/.vite/
+**/.webpack/
+**/tmp/
+**/temp/
+**/logs/
+**/*.log
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/pnpm-debug.log*
+
+# ==========================================
+# TEST & COVERAGE OUTPUT
+# ==========================================
+**/coverage/
+**/.nyc_output/
+**/test-results/
+**/playwright-report/
+**/blob-report/
+**/junit.xml
+
+# ==========================================
+# FRAMEWORK & TOOL CACHES
+# ==========================================
+**/.eslintcache
+**/.sass-cache/
+**/.grunt/
+**/.gulp-cache/
+**/.serverless/
+**/.docusaurus/
+**/.astro/
+
+# ==========================================
+# ENVIRONMENT & SECRETS
+# ==========================================
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.sample
+!**/.env.template
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+
+# ==========================================
+# LARGE GENERATED DATA & BINARIES
+# ==========================================
+**/*.dump
+**/*.bak
+**/*.backup
+**/*.sqlite
+**/*.sqlite3
+**/*.db
+**/*.bin
+**/*.wasm
+**/*.class
+**/*.o
+**/*.obj
+**/*.dll
+**/*.exe
+**/*.so
+**/*.dylib
+
+# ==========================================
+# PYTHON
+# ==========================================
+**/__pycache__/
+**/*.py[cod]
+**/.venv/
+**/venv/
+**/env/
+**/site-packages/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+
+# ==========================================
+# RUST
+# ==========================================
+**/target/
+
+# ==========================================
+# SOLANA / ANCHOR GENERATED OUTPUT
+# ==========================================
+**/test-ledger/
+**/.anchor/
+**/node_modules/.cache/
+
+# ==========================================
+# IDE & EDITOR
+# ==========================================
+**/.idea/
+**/.vscode/*
+!**/.vscode/extensions.json
+!**/.vscode/settings.json
+!**/.vscode/launch.json
+!**/.vscode/tasks.json
+**/*.swp
+**/*.swo
+**/*~
+
+# ==========================================
+# OPERATING SYSTEM
+# ==========================================
+**/.DS_Store
+**/Thumbs.db
+**/Desktop.ini
+**/$RECYCLE.BIN/
+
+# ==========================================
+# PACKAGE MANAGER GENERATED FILES
+# ==========================================
+**/.npm/
+**/.yarn/unplugged/
+**/.yarn/install-state.gz
+
+# ==========================================
+# LOCAL DATABASE / UPLOADS
+# ==========================================
+**/uploads/
+**/storage/
+**/local-data/
+**/data/generated/
+
+# ==========================================
+# OPTIONAL LARGE ARCHIVES
+# Uncomment if you want to ignore archives everywhere
+# ==========================================
+# **/*.zip
+# **/*.7z
+# **/*.rar
+# **/*.tar
+# **/*.gz
+# **/*.iso

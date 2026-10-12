@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ClimaLedger — Audit dan ESG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='76,8 48,12 20,32' fill='%2316234F'/%3E%3Cpolygon points='76,8 20,32 10,58' fill='%231E3A8A'/%3E%3Cpolygon points='76,8 10,58 26,82' fill='%2394A3B8'/%3E%3Cpolygon points='76,8 26,82 46,92' fill='%2316234F'/%3E%3Cpolygon points='76,8 92,40 86,66' fill='%2310B981'/%3E%3Cpolygon points='76,8 86,66 64,84' fill='%236EE7B7'/%3E%3Cpolygon points='76,8 64,84 46,92' fill='%23065F46'/%3E%3Cpath d='M76,8 Q66,50 46,92' fill='none' stroke='white' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+window.addEventListener('DOMContentLoaded',function(){
+  if(window.tailwind && window.tailwind.config!==undefined){
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans:['"Plus Jakarta Sans"','ui-sans-serif','system-ui','sans-serif'], mono:['"JetBrains Mono"','ui-monospace','monospace'] },
+          colors: {
+            brand:{50:'#ECFDF5',100:'#D1FAE5',200:'#A7F3D0',300:'#6EE7B7',400:'#34D399',500:'#10B981',600:'#059669',700:'#047857',800:'#065F46',900:'#064E3B'},
+            sol:{500:'#9945FF'}
+          },
+          boxShadow:{ soft:'0 1px 2px rgba(15,23,42,.05), 0 10px 30px -14px rgba(15,23,42,.18)', inset:'inset 0 0 0 1px rgba(15,23,42,.06)' },
+          borderRadius:{ '2xl':'1rem','3xl':'1.25rem' }
+        }
+      }
+    };
+  }
+});
+</script>
+<style>
+  html{scroll-behavior:smooth}
+  body{font-family:"Plus Jakarta Sans",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+  ::selection{background:#A7F3D0}
+  .skel{background:linear-gradient(90deg,#EEF2F7 25%,#F7FAFC 37%,#EEF2F7 63%);background-size:400% 100%;animation:sk 1.4s ease-in-out infinite}
+  @keyframes sk{0%{background-position:100% 0}100%{background-position:0 0}}
+  @media (prefers-reduced-motion:reduce){.skel{animation-duration:3s}}
+  .spin{width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:9999px;animation:sp .7s linear infinite;display:inline-block}
+  .spin.dk{border-color:#CBD5E1;border-top-color:#059669}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  input[type=range].rng{accent-color:#059669}
+  ::-webkit-scrollbar{height:8px;width:8px}
+  ::-webkit-scrollbar-thumb{background:#CBD5E1;border-radius:8px}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+<div class="min-h-screen flex">
+  <!-- SIDEBAR -->
+  <aside id="sidebar" data-open="true" class="hidden md:flex md:flex-col w-64 shrink-0 bg-slate-950 text-slate-300 sticky top-0 h-screen overflow-y-auto transition-[width] duration-200 ease-in-out">
+    <div id="logoRow" class="flex items-center justify-between px-3 h-16 shrink-0 gap-2">
+      <div id="logoGroup" class="flex items-center gap-2 min-w-0 cursor-pointer rounded-lg hover:bg-white/5 transition py-1.5 -my-1.5 px-1 -mx-1" title="Klik untuk ciutkan/lebarkan sidebar">
+        <div class="w-9 h-9 shrink-0 grid place-items-center">
+          <svg id="logoMark" width="26" height="26" viewBox="0 0 100 100" class="shrink-0" aria-hidden="true">
+            <polygon points="76,8 48,12 20,32" fill="#16234F"/>
+            <polygon points="76,8 20,32 10,58" fill="#1E3A8A"/>
+            <polygon points="76,8 10,58 26,82" fill="#94A3B8"/>
+            <polygon points="76,8 26,82 46,92" fill="#16234F"/>
+            <polygon points="76,8 92,40 86,66" fill="#10B981"/>
+            <polygon points="76,8 86,66 64,84" fill="#6EE7B7"/>
+            <polygon points="76,8 64,84 46,92" fill="#065F46"/>
+            <path d="M76,8 Q66,50 46,92" fill="none" stroke="#ffffff" stroke-width="7" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span id="logoText" class="text-white font-extrabold tracking-tight text-[15px] whitespace-nowrap overflow-hidden">ClimaLedger</span>
+      </div>
+      <button id="sidebarToggle" type="button" class="shrink-0 text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition" aria-label="Ciutkan atau lebarkan sidebar" title="Ciutkan atau lebarkan sidebar">
+        <svg id="toggleIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="transition-transform duration-200"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+    <nav class="px-3 mt-2 space-y-0.5 text-sm font-medium" id="navMain"></nav>
+    <div class="mt-auto p-4 space-y-2 border-t border-white/10 text-xs" id="sideFoot"></div>
+  </aside>
+
+  <!-- mobile nav -->
+  <div class="md:hidden fixed bottom-0 inset-x-0 z-40 bg-slate-950/95 backdrop-blur border-t border-white/10 flex overflow-x-auto" id="navMobile"></div>
+
+  <div class="flex-1 min-w-0 flex flex-col pb-16 md:pb-0">
+    <!-- TOPBAR -->
+    <header class="sticky top-0 z-30 bg-white/85 backdrop-blur border-b border-slate-200">
+      <div class="h-16 px-4 md:px-8 flex items-center justify-between gap-3">
+        <div class="font-bold text-slate-900" id="orgName"></div>
+        <div class="flex items-center gap-2 flex-wrap" id="topRight"></div>
+      </div>
+    </header>
+    <main class="px-4 md:px-8 py-6 max-w-[1320px] w-full mx-auto flex-1" id="view"></main>
+  </div>
+</div>
+
+<div id="modalRoot"></div>
+<input type="file" id="kybFile" hidden>
+<div id="toast" class="fixed left-1/2 -translate-x-1/2 bottom-6 md:bottom-6 bg-slate-900 text-white px-5 py-2.5 rounded-xl font-medium opacity-0 pointer-events-none transition-all translate-y-4 z-[90] max-w-[calc(100vw-2rem)] shadow-soft" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+/* ================= i18n ================= */
+var I18N={
+ id:{
+  app_name:'ClimaLedger', app_tag:'Carbon Ops',
+  nav_dashboard:'Dashboard', nav_tracker:'Tracker emisi', nav_assess:'Penilaian kredit', nav_tokenize:'Tokenisasi',
+  nav_market:'Marketplace', nav_portfolio:'Portofolio', nav_audit:'Audit dan ESG', nav_settings:'Pengaturan perusahaan',
+  grp_overview:'Ringkasan', grp_emission:'Emisi', grp_credit:'Kredit karbon', grp_compliance:'Kepatuhan',
+  wallet_connect:'Hubungkan wallet', wallet_connected:'Terhubung', wallet_disconnected:'Terputus', wallet_demo:'(demo)',
+  kyb:'KYB', kyb_pass:'Lolos', kyb_review:'Ditinjau', iso:'ISO 14064', iso_pass:'Lulus', iso_fail:'Belum',
+  btn_export_csv:'Ekspor CSV', btn_export_pdf:'Ekspor PDF', btn_view_all:'Lihat semua', btn_retry:'Coba lagi',
+  btn_open_audit:'Buka audit trail', btn_tokenize_surplus:'Tokenisasi surplus', btn_cancel:'Batal', btn_close:'Tutup',
+  btn_confirm_buy:'Konfirmasi pembelian', btn_create_listing:'Buat listing', btn_sign_retire:'Retire dan tanda tangani',
+  btn_apply:'Terapkan', btn_add:'Tambah data', btn_copy:'Salin', btn_reupload:'Unggah ulang', btn_approve_sim:'Simulasikan persetujuan',
+  status_up:'naik', status_down:'turun', vs_last_week:'vs minggu lalu', status_label:'Status',
+  status_ready:'Siap', status_attention:'Perlu tindakan',
+  kpi_emissions:'Total emisi (YTD)', kpi_offset:'Karbon berhasil di-offset', kpi_tokens:'Total saldo token', kpi_compliance:'Skor kepatuhan',
+  kpi_emissions_sub:'tCO2e periode berjalan', kpi_offset_sub:'tCO2e diretire, akumulatif', kpi_tokens_sub:'tCO2e di wallet dan escrow', kpi_compliance_sub:'KYB, ISO 14064, wallet',
+  chart_title:'Aktivitas token mingguan', chart_sub:'Token diterbitkan (mint) vs diretire, 8 minggu terakhir',
+  legend_minted:'Diterbitkan (mint)', legend_retired:'Diretire',
+  table_title:'Batch yang perlu tindakan', table_sub:'Diurutkan, bisa difilter — fokus ke yang butuh keputusan Anda',
+  cta_filter:'Hanya tampilkan yang perlu tindakan', col_project:'Proyek', col_standard:'Standar', col_vintage:'Vintage', col_remaining:'Tersisa', col_status:'Status', col_action:'Tindakan',
+  empty_title:'Tidak ada baris yang cocok', empty_body:'Coba matikan filter di atas untuk melihat semua batch.',
+  loading_title:'Memuat data…', error_title:'Gagal memuat data', error_body:'Terjadi kendala saat mengambil data dashboard. Ini disimulasikan untuk pratinjau desain.',
+  preview_state:'Pratinjau status', state_normal:'Normal', state_loading:'Memuat', state_empty:'Kosong', state_error:'Error',
+  lang_label:'Bahasa',
+  settings_kyb_title:'Status verifikasi KYB', settings_wallet_title:'Koneksi Phantom Wallet', settings_profile_title:'Profil perusahaan', settings_design_title:'Sistem desain: font dan skala tipografi'
+ },
+ en:{
+  app_name:'ClimaLedger', app_tag:'Carbon Ops',
+  nav_dashboard:'Dashboard', nav_tracker:'Emissions Tracker', nav_assess:'Credit Assessment', nav_tokenize:'Tokenization',
+  nav_market:'Marketplace', nav_portfolio:'Portfolio', nav_audit:'Audit & ESG', nav_settings:'Company Settings',
+  grp_overview:'Overview', grp_emission:'Emissions', grp_credit:'Carbon Credits', grp_compliance:'Compliance',
+  wallet_connect:'Connect wallet', wallet_connected:'Connected', wallet_disconnected:'Disconnected', wallet_demo:'(demo)',
+  kyb:'KYB', kyb_pass:'Passed', kyb_review:'In review', iso:'ISO 14064', iso_pass:'Passed', iso_fail:'Not yet',
+  btn_export_csv:'Export CSV', btn_export_pdf:'Export PDF', btn_view_all:'View all', btn_retry:'Retry',
+  btn_open_audit:'Open audit trail', btn_tokenize_surplus:'Tokenize surplus', btn_cancel:'Cancel', btn_close:'Close',
+  btn_confirm_buy:'Confirm purchase', btn_create_listing:'Create listing', btn_sign_retire:'Retire & sign',
+  btn_apply:'Apply', btn_add:'Add entry', btn_copy:'Copy', btn_reupload:'Re-upload', btn_approve_sim:'Simulate approval',
+  status_up:'up', status_down:'down', vs_last_week:'vs last week', status_label:'Status',
+  status_ready:'Ready', status_attention:'Needs attention',
+  kpi_emissions:'Total emissions (YTD)', kpi_offset:'Carbon offset delivered', kpi_tokens:'Total token balance', kpi_compliance:'Compliance score',
+  kpi_emissions_sub:'tCO2e, current period', kpi_offset_sub:'tCO2e retired, cumulative', kpi_tokens_sub:'tCO2e in wallet & escrow', kpi_compliance_sub:'KYB, ISO 14064, wallet',
+  chart_title:'Weekly token activity', chart_sub:'Tokens minted vs retired, last 8 weeks',
+  legend_minted:'Minted', legend_retired:'Retired',
+  table_title:'Batches needing action', table_sub:'Sortable and filterable — focused on what needs your decision',
+  cta_filter:'Show only items needing action', col_project:'Project', col_standard:'Standard', col_vintage:'Vintage', col_remaining:'Remaining', col_status:'Status', col_action:'Action',
+  empty_title:'No rows match', empty_body:'Turn off the filter above to see all batches.',
+  loading_title:'Loading data…', error_title:'Failed to load data', error_body:'Something went wrong fetching dashboard data. This is simulated for the design preview.',
+  preview_state:'State preview', state_normal:'Normal', state_loading:'Loading', state_empty:'Empty', state_error:'Error',
+  lang_label:'Language',
+  settings_kyb_title:'KYB verification status', settings_wallet_title:'Phantom wallet connection', settings_profile_title:'Company profile', settings_design_title:'Design system: fonts & type scale'
+ }
+};
+var locale='id';
+function t(k){ return (I18N[locale]&&I18N[locale][k])!==undefined?I18N[locale][k]:(I18N.id[k]!==undefined?I18N.id[k]:k); }
+
+/* ================= helpers ================= */
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var nf0=new Intl.NumberFormat('id-ID',{maximumFractionDigits:0});
+var nf1=new Intl.NumberFormat('id-ID',{maximumFractionDigits:1});
+var nf3=new Intl.NumberFormat('id-ID',{maximumFractionDigits:3});
+var nfF=new Intl.NumberFormat('id-ID',{maximumFractionDigits:5});
+var nf2=new Intl.NumberFormat('id-ID',{maximumFractionDigits:2,minimumFractionDigits:2});
+var fmt=function(n){return nf0.format(Math.round(n))};
+var fmtT=function(n){return nf1.format(n)};
+var fmtA=function(n){return nf3.format(n)};
+var usd=function(n){return nf2.format(n)};
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+var tt; function toast(m){var el=$('#toast'); el.textContent=m; el.classList.remove('opacity-0','translate-y-4'); clearTimeout(tt); tt=setTimeout(function(){el.classList.add('opacity-0','translate-y-4')},3200);}
+var B58='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+function b58(bytes){var digits=[0];for(var i=0;i<bytes.length;i++){var carry=bytes[i];for(var j=0;j<digits.length;j++){carry+=digits[j]<<8;digits[j]=carry%58;carry=(carry/58)|0;}while(carry>0){digits.push(carry%58);carry=(carry/58)|0;}}var out='';for(var k=0;k<bytes.length&&bytes[k]===0;k++)out+='1';for(var q=digits.length-1;q>=0;q--)out+=B58[digits[q]];return out;}
+function rnd(n){var a=new Uint8Array(n); if(window.crypto&&window.crypto.getRandomValues) window.crypto.getRandomValues(a); else for(var i=0;i<n;i++)a[i]=Math.floor(Math.random()*256); return a;}
+var newAddr=function(){return b58(rnd(32))}, newSig=function(){return b58(rnd(64))};
+var short=function(s,a,b){a=a||5;b=b||4;return s.length>a+b+1?s.slice(0,a)+'…'+s.slice(-b):s};
+var MONTHS_ID=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+var MONTHS_EN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function MONTHS(){return locale==='en'?MONTHS_EN:MONTHS_ID}
+function fdate(d){return d.toLocaleString(locale==='en'?'en-GB':'id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+function download(name,blob){var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},1500);}
+function copyText(txt){function fb(){var ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy')}catch(e){}document.body.removeChild(ta);} try{if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).catch(fb); else fb();}catch(e){fb();} toast(locale==='en'?'Copied to clipboard':'Disalin ke clipboard');}
+
+/* ================= UI atoms (Tailwind) ================= */
+function Btn(kind){ // primary|ghost|outline|danger
+  var base='inline-flex items-center justify-center gap-2 rounded-xl font-semibold text-sm px-4 py-2.5 transition disabled:opacity-40 disabled:cursor-not-allowed';
+  return kind==='primary'?base+' bg-brand-600 text-white hover:bg-brand-700 shadow-sm':
+    kind==='danger'?base+' bg-rose-600 text-white hover:bg-rose-700 shadow-sm':
+    kind==='outline'?base+' bg-white border border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50':
+    base+' text-brand-700 hover:bg-brand-50';
+}
+function Sm(cls){return cls+' text-xs px-3 py-1.5 rounded-lg'}
+function Badge(kind){
+  return kind==='ok'?'inline-flex items-center gap-1 rounded-full bg-brand-50 text-brand-700 text-xs font-semibold px-2.5 py-1':
+    kind==='warn'?'inline-flex items-center gap-1 rounded-full bg-amber-50 text-amber-700 text-xs font-semibold px-2.5 py-1':
+    kind==='danger'?'inline-flex items-center gap-1 rounded-full bg-rose-50 text-rose-700 text-xs font-semibold px-2.5 py-1':
+    kind==='info'?'inline-flex items-center gap-1 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold px-2.5 py-1':
+    'inline-flex items-center gap-1 rounded-full bg-slate-100 text-slate-600 text-xs font-semibold px-2.5 py-1';
+}
+var CARD='bg-white rounded-2xl border border-slate-200 shadow-soft';
+var FIELD_IN='w-full rounded-xl border border-slate-200 bg-white text-slate-900 placeholder-slate-400 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500';
+
+/* ================= data model ================= */
+var CATS={
+  bbm:{key:'bbm',name_id:'BBM armada',name_en:'Fleet fuel',scope:1,unit_id:'liter solar',unit_en:'liters diesel',f:0.00268,base:377000,dec:0},
+  genset:{key:'genset',name_id:'Genset dan boiler',name_en:'Generator & boiler',scope:1,unit_id:'liter solar',unit_en:'liters diesel',f:0.00268,base:224000,dec:0},
+  listrik:{key:'listrik',name_id:'Listrik yang dibeli',name_en:'Purchased electricity',scope:2,unit_id:'MWh',unit_en:'MWh',f:0.87,base:1414,dec:0},
+  biaya:{key:'biaya',name_id:'Emisi terbiayai (kategori 15)',name_en:'Financed emissions (cat. 15)',scope:3,unit_id:'USD juta pinjaman',unit_en:'USD mn financed',f:250,base:7.1,dec:1},
+  belanja:{key:'belanja',name_id:'Pembelian barang dan jasa',name_en:'Purchased goods & services',scope:3,unit_id:'USD juta belanja',unit_en:'USD mn spend',f:350,base:2.83,dec:2},
+  dinas:{key:'dinas',name_id:'Perjalanan dinas',name_en:'Business travel',scope:3,unit_id:'ribu penumpang-km',unit_en:'thousand pax-km',f:0.15,base:2867,dec:0}
+};
+var CAT_KEYS=Object.keys(CATS);
+function catName(k){return locale==='en'?CATS[k].name_en:CATS[k].name_id}
+function catUnit(k){return locale==='en'?CATS[k].unit_en:CATS[k].unit_id}
+var MULT=[0.96,1.02,1.05,0.99,1.03,0.98,1.01,0.97];
+
+var state={
+  view:'audit', previewState:'normal',
+  org:'PT Kencana Lestari Energi',
+  cluster:'devnet', wallet:{connected:true,mode:'demo',address:newAddr()}, usdc:25000, program:newAddr(),
+  kyb:[
+    {id:'doc',name_id:'Akta pendirian dan NIB',name_en:'Deed of establishment & business ID',detail_id:'Diverifikasi 10 Mar 2026',detail_en:'Verified 10 Mar 2026',status:'verified',file:null},
+    {id:'ubo',name_id:'Beneficial owner (UBO)',name_en:'Beneficial owner (UBO)',detail_id:'Diverifikasi 10 Mar 2026',detail_en:'Verified 10 Mar 2026',status:'verified',file:null},
+    {id:'sanction',name_id:'Penyaringan sanksi dan PEP',name_en:'Sanctions & PEP screening',detail_id:'Bersih, diperiksa 01 Sep 2026',detail_en:'Clear, checked 01 Sep 2026',status:'verified',file:null},
+    {id:'allow',name_id:'Wallet terdaftar di ComplianceRegistry',name_en:'Wallet registered in ComplianceRegistry',detail_id:'Allowlist aktif untuk mint, trade, retire',detail_en:'Allowlist active for mint, trade, retire',status:'verified',file:null}
+  ],
+  iso:{status:'verified',date:'14 Mar 2026',hash:'0x7c1e…a94b'},
+  entries:[],entrySeq:0,
+  offsetPlan:9000,
+  registry:[
+    {id:'r1',project:'Reforestasi Kalimantan Tengah',project_en:'Central Kalimantan Reforestation',standard:'VCS',vintage:2023,status:'active',remaining:0},
+    {id:'r2',project:'Kompor efisien Nusa Tenggara',project_en:'Nusa Tenggara Efficient Stoves',standard:'GS',vintage:2024,status:'active',remaining:4000},
+    {id:'r3',project:'Mangrove Sulawesi',project_en:'Sulawesi Mangrove',standard:'VCS',vintage:2022,status:'active',remaining:5000},
+    {id:'r5',project:'Restorasi gambut Riau',project_en:'Riau Peatland Restoration',standard:'VCS',vintage:2023,status:'active',remaining:6200},
+    {id:'r4',project:'Biogas Jawa Barat',project_en:'West Java Biogas',standard:'VCS',vintage:2025,status:'pending',remaining:1800}
+  ],
+  batchSeq:143,
+  tok:{rowId:null,amount:0,phase:'idle',stepIdx:-1,progress:0,result:null,locked:0},
+  holdings:[
+    {code:'CL-VCS-0142',project:'Reforestasi Kalimantan Tengah',project_en:'Central Kalimantan Reforestation',standard:'VCS',vintage:2023,minted:5200,balance:2400,listed:1200,retired:1600},
+    {code:'CL-GS-0087',project:'Kompor efisien Nusa Tenggara',project_en:'Nusa Tenggara Efficient Stoves',standard:'GS',vintage:2024,minted:0,balance:950,listed:0,retired:700}
+  ],
+  listings:[],listSeq:1,
+  ledger:[],evSeq:0,slot:412655000,
+  certs:[],certSeq:183,
+  f:{tMonth:'all',tScope:'all',mStd:'all',mQ:'',mSort:'price-asc',aType:'all',aQ:'',dashCta:false,dashSort:{col:'remaining',dir:'desc'}}
+};
+function projName(r){return locale==='en'&&r.project_en?r.project_en:r.project}
+function holdProjName(h){return locale==='en'&&h.project_en?h.project_en:h.project}
+function kybName(s){return locale==='en'?s.name_en:s.name_id}
+function kybDetail(s){return locale==='en'?s.detail_en:s.detail_id}
+
+(function(){ CAT_KEYS.forEach(function(k,ci){ for(var m=0;m<8;m++){ var c=CATS[k],q=c.base*MULT[(m+ci)%8]; q=c.dec?Number(q.toFixed(c.dec)):Math.round(q); state.entries.push({id:++state.entrySeq,m:m,cat:k,qty:q}); } }); })();
+function entryT(e){return e.qty*CATS[e.cat].f}
+
+state.listings=[
+  {id:'l1',code:'CL-GS-0113',project:'Panel surya atap Vietnam',project_en:'Vietnam Rooftop Solar',standard:'GS',vintage:2024,available:12000,price:6.40,seller:newAddr(),mine:false},
+  {id:'l2',code:'CL-VCS-0201',project:'Karbon biru mangrove Sulawesi',project_en:'Sulawesi Blue Carbon Mangrove',standard:'VCS',vintage:2022,available:8400,price:18.50,seller:newAddr(),mine:false},
+  {id:'l3',code:'CL-VCS-0233',project:'Restorasi gambut Sumatra',project_en:'Sumatra Peatland Restoration',standard:'VCS',vintage:2023,available:5200,price:14.20,seller:newAddr(),mine:false},
+  {id:'l4',code:'CL-GS-0150',project:'Pemurnian air sumur Kenya',project_en:'Kenya Well Water Purification',standard:'GS',vintage:2023,available:3400,price:8.90,seller:newAddr(),mine:false},
+  {id:'own1',code:'CL-VCS-0142',project:'Reforestasi Kalimantan Tengah',project_en:'Central Kalimantan Reforestation',standard:'VCS',vintage:2023,available:1200,price:15.20,seller:state.wallet.address,mine:true}
+];
+function nextSlot(){state.slot+=40+Math.floor(Math.random()*360);return state.slot;}
+function mkEvent(type,code,amount,when,extra){extra=extra||{};var e={id:++state.evSeq,time:when||new Date(),type:type,code:code,amount:amount,usdc:extra.usdc||0,price:extra.price||0,sig:newSig(),slot:nextSlot(),signer:extra.signer||state.wallet.address,fee:5000,cu:20000+Math.floor(Math.random()*70000),status:'Finalized',mint:extra.mint||null,ata:extra.ata||null,intentSig:extra.intentSig||null,memo:extra.memo||''};state.ledger.unshift(e);return e;}
+(function(){
+  var d=function(day,h,mi){return new Date(2026,8,day,h,mi,0)};
+  mkEvent('Attestation','CL-VCS-0142',5200,d(12,3,14),{memo:'attestation 2/3 signer'});
+  mkEvent('Mint','CL-VCS-0142',5200,d(12,3,15),{mint:newAddr(),ata:newAddr()});
+  mkEvent('Listing','CL-VCS-0142',1200,d(14,10,20),{price:15.2});
+  var r1=mkEvent('Retirement','CL-VCS-0142',1600,d(16,8,5),{memo:'Offset emisi Scope 1, periode 2026'});
+  mkEvent('Pembelian','CL-GS-0087',1650,d(17,9,31),{usdc:16250.85,price:9.8});
+  mkEvent('Mint','CL-GS-0150',2200,d(24,6,40),{mint:newAddr(),ata:newAddr()});
+  var r2=mkEvent('Retirement','CL-GS-0087',700,d(19,14,2),{memo:'Offset emisi Scope 2, periode 2026'});
+  var r3=mkEvent('Retirement','CL-GS-0150',450,d(27,11,12),{memo:'Offset emisi Scope 3, periode 2026'});
+  state.certs.unshift({id:183,code:'CL-VCS-0142',project:'Reforestasi Kalimantan Tengah',standard:'VCS',vintage:2023,amount:1600,beneficiary:'PT Kencana Lestari Energi',reason:'Offset emisi Scope 1, periode 2026',sig:r1.sig,slot:r1.slot,time:r1.time});
+  state.certs.unshift({id:184,code:'CL-GS-0087',project:'Kompor efisien Nusa Tenggara',standard:'GS',vintage:2024,amount:700,beneficiary:'PT Kencana Lestari Energi',reason:'Offset emisi Scope 2, periode 2026',sig:r2.sig,slot:r2.slot,time:r2.time});
+  state.certs.unshift({id:185,code:'CL-GS-0150',project:'Pemurnian air sumur Kenya',standard:'GS',vintage:2023,amount:450,beneficiary:'PT Kencana Lestari Energi',reason:'Offset emisi Scope 3, periode 2026',sig:r3.sig,slot:r3.slot,time:r3.time});
+  state.certSeq=185;
+})();
+
+/* ================= derived ================= */
+function emTotals(){ var t={1:0,2:0,3:0,all:0},monthly=[]; for(var i=0;i<12;i++) monthly.push({1:0,2:0,3:0,all:0,has:false}); state.entries.forEach(function(e){var v=entryT(e),s=CATS[e.cat].scope; t[s]+=v;t.all+=v; monthly[e.m][s]+=v;monthly[e.m].all+=v;monthly[e.m].has=true;}); return {t:t,monthly:monthly}; }
+function kybOk(){return state.kyb.every(function(k){return k.status==='verified'})}
+function isoOk(){return state.iso.status==='verified'}
+function eligible(r){return r.status==='active'&&r.vintage>=2019&&isoOk()&&r.remaining>0}
+function eligibleTotal(){return state.registry.filter(eligible).reduce(function(a,r){return a+r.remaining},0)}
+function surplus(){return Math.max(0,eligibleTotal()-state.offsetPlan)}
+function retiredTotal(){return state.holdings.reduce(function(a,h){return a+h.retired},0)}
+function tokenTotal(){return state.holdings.reduce(function(a,h){return a+h.balance+h.listed},0)}
+function findHolding(code){return state.holdings.filter(function(h){return h.code===code})[0]}
+function ensureHolding(code,m){var h=findHolding(code);if(!h){h={code:code,project:m.project,project_en:m.project_en,standard:m.standard,vintage:m.vintage,minted:0,balance:0,listed:0,retired:0};state.holdings.push(h);}return h}
+function stdName(s){return s==='VCS'?'Verra VCS':'Gold Standard'}
+function stdBadgeHtml(s){return '<span class="'+Badge(s==='VCS'?'ok':'info')+'">'+stdName(s)+'</span>'}
+function typeBadgeHtml(tp){return '<span class="'+Badge(tp==='Mint'||tp==='Retirement'?'ok':tp==='Pembelian'?'info':tp==='Attestation'?'neutral':'warn')+'">'+tp+'</span>'}
+function summary(e){var a=fmtA(e.amount)+' tCO2e '+e.code; return e.type==='Mint'?(locale==='en'?'Mint ':'Mint ')+a+(locale==='en'?' to company token account':' ke token account perusahaan'):e.type==='Attestation'?(locale==='en'?'Registry attestation for ':'Attestation registry untuk ')+a:e.type==='Pembelian'?(locale==='en'?'Bought ':'Beli ')+a+(locale==='en'?' for ':' seharga ')+usd(e.usdc)+' USDC':e.type==='Listing'?(locale==='en'?'Listed ':'Listing ')+a+' @ '+usd(e.price)+' USDC/t':e.type==='Pembatalan'?(locale==='en'?'Cancel listing ':'Batalkan listing ')+a:(locale==='en'?'Retire (burn) ':'Retire (bakar) ')+a;}
+
+/* weekly real series from ledger: Mint vs Retirement, last 8 ISO weeks ending "now" */
+var NOW=new Date(2026,8,30);
+function weekIndex(d){ var diffDays=Math.floor((NOW-d)/86400000); return Math.floor(diffDays/7); } // 0 = this week
+function weeklySeries(){
+  var minted=[0,0,0,0,0,0,0,0], retired=[0,0,0,0,0,0,0,0];
+  state.ledger.forEach(function(e){
+    var wi=weekIndex(e.time); if(wi<0||wi>7) return;
+    var idx=7-wi; // chronological order, oldest..newest
+    if(e.type==='Mint') minted[idx]+=e.amount;
+    if(e.type==='Retirement') retired[idx]+=e.amount;
+  });
+  return {minted:minted,retired:retired};
+}
+function weekDelta(series){
+  var n=series.length, cur=series[n-1], prev=series[n-2]||0;
+  if(prev===0) return {pct:cur>0?100:0,dir:cur>prev?'up':(cur<prev?'down':'flat')};
+  var pct=((cur-prev)/prev)*100;
+  return {pct:pct,dir:pct>0.01?'up':(pct<-0.01?'down':'flat')};
+}
+
+/* ================= wallet ================= */
+function phantom(){var p=window.phantom&&window.phantom.solana?window.phantom.solana:(window.solana&&window.solana.isPhantom?window.solana:null); return p&&p.isPhantom?p:null;}
+async function connectPhantom(){var p=phantom(); if(!p){toast(locale==='en'?'Phantom extension not detected. Install Phantom, or use demo mode.':'Ekstensi Phantom tidak terdeteksi. Pasang Phantom, atau gunakan mode demo.');return false;} try{var r=await p.connect(); state.wallet={connected:true,mode:'phantom',address:r.publicKey.toString()}; toast('Phantom: '+short(state.wallet.address)); closeModal(); render(); return true;}catch(e){toast(locale==='en'?'Phantom connection cancelled':'Koneksi Phantom dibatalkan'); return false;}}
+function connectDemo(){state.wallet={connected:true,mode:'demo',address:newAddr()}; toast(locale==='en'?'Demo mode active with a simulated wallet':'Mode demo aktif dengan wallet simulasi'); closeModal(); render();}
+async function disconnect(){if(state.wallet.mode==='phantom'){try{var p=phantom();if(p)await p.disconnect();}catch(e){}} state.wallet={connected:false,mode:null,address:null}; toast(locale==='en'?'Wallet disconnected':'Wallet diputuskan'); render();}
+async function signIntent(msg){if(state.wallet.mode==='phantom'){var p=phantom();if(!p)throw new Error('no phantom');var res=await p.signMessage(new TextEncoder().encode(msg),'utf8');return b58(res.signature);} return b58(rnd(64));}
+async function guard(msg){if(!kybOk()){toast(locale==='en'?'Rejected by ComplianceRegistry: KYB not passed. Complete it in Settings.':'Ditolak ComplianceRegistry: KYB belum lolos. Selesaikan di Pengaturan.'); go('settings'); return null;} if(!state.wallet.connected){openConnect(); return null;} try{return await signIntent(msg);}catch(e){toast(locale==='en'?'Signing cancelled in Phantom':'Penandatanganan dibatalkan di Phantom'); return null;}}
+
+/* ================= modal ================= */
+function openModal(html){$('#modalRoot').innerHTML='<div class="fixed inset-0 bg-slate-900/50 grid place-items-center p-4 z-[60] overflow-auto" data-modal-bg="1" role="dialog" aria-modal="true">'+html+'</div>'; var f=$('#modalRoot input,#modalRoot select,#modalRoot button.js-focus'); if(f) f.focus();}
+function closeModal(){$('#modalRoot').innerHTML='';}
+function Dialog(inner,wide){return '<div class="bg-white rounded-3xl p-6 w-full '+(wide?'max-w-2xl':'max-w-md')+' shadow-2xl max-h-[calc(100vh-2rem)] overflow-auto">'+inner+'</div>';}
+function openConnect(){
+  var hasP=!!phantom();
+  openModal(Dialog('<h3 class="text-lg font-bold mb-1">'+t('wallet_connect')+'</h3>'+
+   '<p class="text-sm text-slate-500 mb-5">'+(locale==='en'?'Your wallet signs mint, purchase, and retire actions on Solana.':'Wallet dipakai untuk menandatangani mint, pembelian, dan retire di jaringan Solana.')+'</p>'+
+   '<button class="'+Btn('primary')+' w-full mb-2.5 !py-3 !text-[15px]" data-action="connect-phantom">'+t('wallet_connect')+' Phantom'+(hasP?'':(locale==='en'?' (not detected)':' (belum terdeteksi)'))+'</button>'+
+   '<button class="'+Btn('outline')+' w-full !py-3" data-action="connect-demo">'+(locale==='en'?'Use demo mode (simulated wallet)':'Gunakan mode demo (wallet simulasi)')+'</button>'+
+   '<p class="text-xs text-slate-400 mt-3">'+(hasP?(locale==='en'?'Phantom detected — a signature request will appear in your extension.':'Phantom terdeteksi. Tanda tangan pesan akan diminta langsung dari ekstensi Anda.'):(locale==='en'?'Phantom not detected. If installed, enable file-URL access for local files, or serve via localhost.':'Phantom tidak terdeteksi. Jika sudah terpasang, aktifkan izin file URL, atau buka lewat localhost.'))+'</p>'+
+   '<div class="flex justify-end mt-4"><button class="'+Btn('outline')+'" data-action="modal-close">'+t('btn_close')+'</button></div>'));
+}
+
+/* ================= nav ================= */
+function go(v){state.view=v; render(); window.scrollTo(0,0);}
+
+var NAVS=[
+ {sec:'grp_overview',items:[['dashboard','nav_dashboard','M4 5h6v6H4zM14 5h6v4h-6zM14 13h6v6h-6zM4 13h6v6H4z']]},
+ {sec:'grp_emission',items:[['tracker','nav_tracker','M4 20V10M10 20V4M16 20v-7M22 20H2'],['assess','nav_assess','M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6zM8.5 12l2.5 2.5 4.5-5']]},
+ {sec:'grp_credit',items:[['tokenize','nav_tokenize','M12 3.5a8.5 8.5 0 100 17 8.5 8.5 0 000-17zM12 7.5v9M9.5 9.8a2 2 0 012-1.8h1.3a1.7 1.7 0 010 3.4h-2.6a1.7 1.7 0 000 3.4h1.4a2 2 0 002-1.6'],['market','nav_market','M3 9l1.5-5h15L21 9M4 9v11h16V9M9 20v-6h6v6'],['portfolio','nav_portfolio','M3 7h16a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2zM3 7l2-3h12M16 14h2']]},
+ {sec:'grp_compliance',items:[['audit','nav_audit','M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01'],['settings','nav_settings','M4 21V5l8-2v18M12 9h8v12M7 9h2M7 13h2M7 17h2M15 13h2M15 17h2']]}
+];
+function iconSvg(path){return '<svg class="w-[18px] h-[18px] shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+path.split('M').filter(Boolean).map(function(p){return '<path d="M'+p+'"/>'}).join('')+'</svg>';}
+function renderNav(){
+  $('#navMain').innerHTML=NAVS.map(function(g){
+    return (sidebarOpen?'<div class="pt-4 pb-1 px-3 text-[10px] font-bold uppercase tracking-widest text-slate-500">'+t(g.sec)+'</div>':'<div class="pt-3 pb-1 flex justify-center"><span class="w-6 h-px bg-white/10"></span></div>')+
+      g.items.map(function(it){
+        var cur=state.view===it[0];
+        return '<button type="button" data-nav="'+it[0]+'" title="'+t(it[1])+'" class="w-full flex items-center '+(sidebarOpen?'gap-3 px-3':'justify-center px-0')+' py-2.5 rounded-xl transition '+(cur?'bg-white/10 text-white border-l-2 border-brand-400 '+(sidebarOpen?'pl-[10px]':''):'text-slate-400 hover:text-white hover:bg-white/5')+'">'+
+          iconSvg(it[2])+(sidebarOpen?'<span class="whitespace-nowrap overflow-hidden">'+t(it[1])+'</span>':'')+'</button>';
+      }).join('');
+  }).join('');
+  $('#navMobile').innerHTML=NAVS.reduce(function(a,g){return a.concat(g.items)},[]).map(function(it){
+    var cur=state.view===it[0];
+    return '<button type="button" data-nav="'+it[0]+'" class="flex-1 min-w-[76px] flex flex-col items-center gap-1 py-2.5 text-[10px] font-medium '+(cur?'text-brand-400':'text-slate-400')+'">'+iconSvg(it[2])+'<span>'+t(it[1]).split(' ')[0]+'</span></button>';
+  }).join('');
+}
+var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+var sidebarOpen=store.get('cl-sidebar')!=='closed';
+function applySidebar(){
+  var side=$('#sidebar'), txt=$('#logoText'), icon=$('#toggleIcon'), foot=$('#sideFoot'), row=$('#logoRow'), tbBtn=$('#sidebarToggle');
+  if(foot) foot.style.display=sidebarOpen?'':'none';
+  if(row) row.className=sidebarOpen?'flex items-center justify-between px-3 h-16 shrink-0 gap-2':'flex items-center justify-center h-16 shrink-0 gap-2';
+  if(tbBtn) tbBtn.style.display=sidebarOpen?'':'none';
+  side.classList.toggle('w-64',sidebarOpen); side.classList.toggle('w-20',!sidebarOpen);
+  if(txt) txt.style.display=sidebarOpen?'':'none';
+  if(icon) icon.style.transform=sidebarOpen?'rotate(0deg)':'rotate(180deg)';
+  renderNav();
+}
+document.addEventListener('DOMContentLoaded',function(){
+  function toggleSidebar(){ sidebarOpen=!sidebarOpen; store.set('cl-sidebar',sidebarOpen?'open':'closed'); applySidebar(); }
+  var tb=$('#sidebarToggle'); if(tb) tb.addEventListener('click',function(e){ e.stopPropagation(); toggleSidebar(); });
+  var lg=$('#logoGroup'); if(lg) lg.addEventListener('click',toggleSidebar);
+  applySidebar();
+});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-nav]'); if(b) go(b.dataset.nav);});
+
+/* ================= charts ================= */
+function niceMax(v){if(v<=0)return 10; var p=Math.pow(10,Math.floor(Math.log10(v))),n=v/p; return (n<=1?1:n<=2?2:n<=5?5:10)*p;}
+function groupedWeekChart(minted,retired){
+  var W=760,H=250,L=48,B=30,T=14,R=8,ph=H-B-T,pw=W-L-R;
+  var max=niceMax(Math.max.apply(null,minted.concat(retired))*1.2||10), n=8, gw=pw/n, bw=gw*0.32,gap=gw*0.06;
+  var o='<svg viewBox="0 0 '+W+' '+H+'" class="w-full h-auto" role="img" aria-label="'+t('chart_sub')+'">';
+  for(var g=0;g<=4;g++){var v=max*g/4,y=T+ph-v/max*ph; o+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="#EEF2F7"/><text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#64748B">'+fmt(v)+'</text>';}
+  for(var i=0;i<n;i++){
+    var x0=L+i*gw+gap, y0=T+ph;
+    var hM=minted[i]/max*ph, hR=retired[i]/max*ph;
+    o+='<rect x="'+x0.toFixed(1)+'" y="'+(y0-hM).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hM.toFixed(1)+'" rx="3" fill="#059669"><title>'+t('legend_minted')+': '+fmt(minted[i])+' tCO2e</title></rect>';
+    o+='<rect x="'+(x0+bw+3).toFixed(1)+'" y="'+(y0-hR).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+hR.toFixed(1)+'" rx="3" fill="#94A3B8"><title>'+t('legend_retired')+': '+fmt(retired[i])+' tCO2e</title></rect>';
+    o+='<text x="'+(x0+bw+1.5).toFixed(1)+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="#94A3B8">'+(locale==='en'?'W':'M')+(i+1)+'</text>';
+  }
+  return o+'</svg>';
+}
+function stackedChart(monthly){
+  var W=760,H=250,L=48,B=28,T=10,R=8,ph=H-B-T,max=niceMax(Math.max.apply(null,monthly.map(function(m){return m.all}))*1.05),bw=(W-L-R)/12,M=MONTHS();
+  var o='<svg viewBox="0 0 '+W+' '+H+'" class="w-full h-auto" role="img">';
+  for(var g=0;g<=4;g++){var v=max*g/4,y=T+ph-v/max*ph; o+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="#EEF2F7"/><text x="'+(L-8)+'" y="'+(y+4)+'" text-anchor="end" font-size="11" fill="#64748B">'+fmt(v)+'</text>';}
+  var cols={1:'#0F172A',2:'#94A3B8',3:'#059669'};
+  monthly.forEach(function(m,i){var x=L+i*bw+bw*.2,w=bw*.6,y=T+ph;[1,2,3].forEach(function(s){var h=m[s]/max*ph;if(h>0){y-=h;o+='<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+w.toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+cols[s]+'" rx="2"><title>'+M[i]+' S'+s+': '+fmt(m[s])+'</title></rect>';}});o+='<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle" font-size="11" fill="'+(m.has?'#64748B':'#CBD5E1')+'">'+M[i]+'</text>';});
+  return o+'</svg>';
+}
+function donut(pct){
+  var r=52,c=2*Math.PI*r,p=Math.max(0,Math.min(100,pct)),dash=(p/100*c).toFixed(1);
+  return '<svg viewBox="0 0 140 140" class="mx-auto" style="max-width:160px" role="img" aria-label="'+nf1.format(p)+'%">'+
+   '<circle cx="70" cy="70" r="'+r+'" fill="none" stroke="#EEF2F7" stroke-width="14"/>'+
+   '<circle cx="70" cy="70" r="'+r+'" fill="none" stroke="#059669" stroke-width="14" stroke-linecap="round" stroke-dasharray="'+dash+' '+c.toFixed(1)+'" transform="rotate(-90 70 70)"/>'+
+   '<text x="70" y="72" text-anchor="middle" font-size="22" font-weight="800" fill="#0F172A">'+nf1.format(p)+'%</text></svg>';
+}
+
+/* ================= skeleton / empty / error components ================= */
+function skelKpi(){return '<div class="'+CARD+' p-5"><div class="skel h-3 w-24 rounded mb-3"></div><div class="skel h-8 w-28 rounded mb-2"></div><div class="skel h-3 w-20 rounded"></div></div>';}
+function skelBlock(h){return '<div class="'+CARD+' p-5"><div class="skel h-4 w-40 rounded mb-4"></div><div class="skel rounded-xl w-full" style="height:'+h+'px"></div></div>';}
+function DashboardSkeleton(){
+  return '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">'+skelKpi()+skelKpi()+skelKpi()+skelKpi()+'</div>'+
+    '<div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5"><div class="xl:col-span-2">'+skelBlock(230)+'</div>'+skelBlock(230)+'</div>'+skelBlock(220);
+}
+function ErrorFallback(){
+  return '<div class="'+CARD+' p-10 text-center max-w-lg mx-auto">'+
+   '<div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 grid place-items-center mx-auto mb-4 text-xl">!</div>'+
+   '<div class="font-bold text-slate-900 mb-1">'+t('error_title')+'</div>'+
+   '<p class="text-sm text-slate-500 mb-5">'+t('error_body')+'</p>'+
+   '<button class="'+Btn('primary')+'" data-action="state-retry">'+t('btn_retry')+'</button></div>';
+}
+function EmptyState(title,body,ctas){
+  return '<div class="'+CARD+' p-10 text-center">'+
+   '<div class="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 grid place-items-center mx-auto mb-4 text-xl">∅</div>'+
+   '<div class="font-bold text-slate-900 mb-1">'+title+'</div><p class="text-sm text-slate-500 mb-5">'+body+'</p>'+
+   (ctas||'')+'</div>';
+}
+function StatePreviewBar(){
+  var opts=[['normal','state_normal'],['loading','state_loading'],['empty','state_empty'],['error','state_error']];
+  return '<div class="mb-4 flex items-center gap-2 flex-wrap text-xs">'+
+   '<span class="text-slate-400 font-semibold uppercase tracking-wide">'+t('preview_state')+'</span>'+
+   opts.map(function(o){var cur=state.previewState===o[0]; return '<button data-action="set-preview" data-v="'+o[0]+'" class="px-2.5 py-1 rounded-lg font-semibold '+(cur?'bg-slate-900 text-white':'bg-white border border-slate-200 text-slate-500 hover:border-slate-300')+'">'+t(o[1])+'</button>';}).join('')+
+   '</div>';
+}
+
+/* ================= dashboard KPI card ================= */
+function KpiCard(opts){
+  var d=opts.delta, hasDelta=d!==null&&d!==undefined;
+  var dirColor=d&&d.dir==='up'?(opts.goodDir==='up'?'text-brand-700 bg-brand-50':'text-amber-700 bg-amber-50'):
+               d&&d.dir==='down'?(opts.goodDir==='down'?'text-brand-700 bg-brand-50':'text-amber-700 bg-amber-50'):'text-slate-500 bg-slate-100';
+  var arrow=d&&d.dir==='up'?'▲':d&&d.dir==='down'?'▼':'—';
+  return '<div class="'+CARD+' p-5 relative overflow-hidden">'+
+   '<div class="absolute left-0 top-0 bottom-0 w-1 '+(opts.bar||'bg-brand-500')+'"></div>'+
+   '<div class="flex items-start justify-between gap-2 mb-1"><span class="text-xs font-semibold text-slate-500">'+opts.label+'</span>'+
+   '<span class="w-8 h-8 rounded-xl '+(opts.iconBg||'bg-brand-50 text-brand-600')+' grid place-items-center text-sm">'+(opts.icon||'●')+'</span></div>'+
+   '<div class="text-3xl font-extrabold tracking-tight text-slate-900 mb-1">'+opts.value+'</div>'+
+   '<div class="flex items-center gap-2 flex-wrap">'+
+     (hasDelta?'<span class="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full '+dirColor+'">'+arrow+' '+nf1.format(Math.abs(d.pct))+'%</span><span class="text-[11px] text-slate-400">'+t('vs_last_week')+'</span>':
+       '<span class="'+Badge(opts.statusKind||'neutral')+'">'+opts.statusText+'</span>')+
+   '</div><div class="text-[11px] text-slate-400 mt-1">'+opts.sub+'</div></div>';
+}
+
+/* ================= views ================= */
+function PageHead(title,sub,actions){return '<div class="flex items-end justify-between gap-4 flex-wrap mb-5"><div><h1 class="text-[26px] sm:text-3xl font-extrabold tracking-tight text-slate-900">'+title+'</h1><p class="text-sm text-slate-500 mt-1">'+sub+'</p></div><div class="flex gap-2 flex-wrap">'+(actions||'')+'</div></div>';}
+
+function viewDashboard(){
+  if(state.previewState==='loading') return StatePreviewBar()+DashboardSkeleton();
+  if(state.previewState==='error') return StatePreviewBar()+ErrorFallback();
+
+  var d=emTotals(),tt2=d.t,ret=retiredTotal(),pct=tt2.all?ret/tt2.all*100:0;
+  var ws=weeklySeries(), dM=weekDelta(ws.minted), dR=weekDelta(ws.retired);
+  var estWeekly=(tt2.all/34.8); // rough weekly run-rate for illustrative KPI delta only
+  var dE={pct:-2.4,dir:'down'}; // modeled small improvement trend, captioned as estimate
+  var netWeek=ws.minted[7]-ws.retired[7], netPrevWeek=ws.minted[6]-ws.retired[6];
+  var dT=weekDelta([netPrevWeek,netWeek].map(function(v){return v}));
+  var complianceScore=Math.round(((kybOk()?1:0)+(isoOk()?1:0)+(state.wallet.connected?1:0))/3*100);
+
+  var kpis='<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">'+
+    KpiCard({label:t('kpi_emissions'),value:fmt(tt2.all),sub:t('kpi_emissions_sub')+(locale==='en'?' · WoW is a modeled estimate':' · WoW adalah estimasi'),delta:dE,goodDir:'down',bar:'bg-slate-800',icon:'📊',iconBg:'bg-slate-100 text-slate-700'})+
+    KpiCard({label:t('kpi_offset'),value:fmt(ret),sub:t('kpi_offset_sub'),delta:dR,goodDir:'up',bar:'bg-brand-500'})+
+    KpiCard({label:t('kpi_tokens'),value:fmt(tokenTotal()),sub:t('kpi_tokens_sub'),delta:dT,goodDir:'up',bar:'bg-indigo-500',icon:'◎',iconBg:'bg-indigo-50 text-indigo-600'})+
+    KpiCard({label:t('kpi_compliance'),value:complianceScore+'%',sub:t('kpi_compliance_sub'),statusText:complianceScore===100?t('status_ready'):t('status_attention'),statusKind:complianceScore===100?'ok':'warn',bar:complianceScore===100?'bg-brand-500':'bg-amber-500',icon:'✓',iconBg:complianceScore===100?'bg-brand-50 text-brand-600':'bg-amber-50 text-amber-600'})+
+  '</div>';
+
+  var chart='<div class="'+CARD+' p-5 xl:col-span-2"><div class="flex items-center justify-between mb-1"><h3 class="font-bold text-slate-900">'+t('chart_title')+'</h3></div><p class="text-xs text-slate-400 mb-3">'+t('chart_sub')+'</p>'+
+    groupedWeekChart(ws.minted,ws.retired)+
+    '<div class="flex gap-5 text-xs text-slate-500 mt-2"><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-brand-600 inline-block"></i>'+t('legend_minted')+'</span><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-slate-400 inline-block"></i>'+t('legend_retired')+'</span></div></div>';
+  var donutCard='<div class="'+CARD+' p-5"><h3 class="font-bold text-slate-900 mb-3">'+t('kpi_offset')+'</h3>'+donut(pct)+
+    '<div class="flex justify-center gap-4 text-xs text-slate-500 mt-3 flex-wrap"><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-brand-600 inline-block"></i>'+fmt(ret)+' t</span><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-slate-200 inline-block"></i>'+fmt(Math.max(0,tt2.all-ret))+' t</span></div></div>';
+
+  // bottom layer: sortable + filterable table (dashboard decision table)
+  var rows=state.registry.slice();
+  var needsAction=function(r){return r.status!=='active'||r.remaining===0||!isoOk();};
+  var filtered=state.f.dashCta?rows.filter(needsAction):rows;
+  var col=state.f.dashSort.col, dir=state.f.dashSort.dir;
+  filtered.sort(function(a,b){
+    var av=col==='remaining'?a.remaining:col==='vintage'?a.vintage:col==='project'?projName(a):a.standard;
+    var bv=col==='remaining'?b.remaining:col==='vintage'?b.vintage:col==='project'?projName(b):b.standard;
+    if(av<bv) return dir==='asc'?-1:1; if(av>bv) return dir==='asc'?1:-1; return 0;
+  });
+  function th(key,label){
+    var active=col===key, arrow=active?(dir==='asc'?'↑':'↓'):'';
+    return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3 cursor-pointer select-none whitespace-nowrap" data-action="dash-sort" data-col="'+key+'">'+label+' <span class="text-slate-400">'+arrow+'</span></th>';
+  }
+  var tableBody=filtered.map(function(r){
+    var na=needsAction(r);
+    return '<tr class="border-t border-slate-100 hover:bg-slate-50/70">'+
+      '<td class="px-4 py-3 font-medium text-slate-800">'+projName(r)+'</td>'+
+      '<td class="px-4 py-3">'+stdBadgeHtml(r.standard)+'</td>'+
+      '<td class="px-4 py-3 text-slate-500">'+r.vintage+'</td>'+
+      '<td class="px-4 py-3 text-right font-semibold tabular-nums">'+fmt(r.remaining)+'</td>'+
+      '<td class="px-4 py-3">'+(na?'<span class="'+Badge('warn')+'">'+t('status_attention')+'</span>':'<span class="'+Badge('ok')+'">'+t('status_ready')+'</span>')+'</td>'+
+      '<td class="px-4 py-3">'+(eligible(r)?'<button class="'+Btn('primary')+' '+Sm('')+'" data-action="goto-tok" data-id="'+r.id+'">'+t('nav_tokenize')+'</button>':'<span class="text-slate-300">—</span>')+'</td></tr>';
+  }).join('');
+  var table='<div class="'+CARD+' overflow-hidden"><div class="p-5 pb-0 flex items-center justify-between gap-3 flex-wrap"><div><h3 class="font-bold text-slate-900">'+t('table_title')+'</h3><p class="text-xs text-slate-400 mt-0.5">'+t('table_sub')+'</p></div>'+
+    '<button class="px-3 py-2 rounded-xl text-xs font-semibold border '+(state.f.dashCta?'bg-brand-600 text-white border-brand-600':'bg-white text-slate-600 border-slate-200 hover:border-slate-300')+'" data-action="dash-cta">'+t('cta_filter')+'</button></div>'+
+    '<div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="bg-slate-50">'+th('project',t('col_project'))+th('standard',t('col_standard'))+th('vintage',t('col_vintage'))+th('remaining',t('col_remaining'))+'<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3">'+t('col_status')+'</th><th class="px-4 py-3"></th></tr></thead>'+
+    '<tbody>'+(filtered.length?tableBody:'<tr><td colspan="6" class="p-0"></td></tr>')+'</tbody></table></div>'+
+    (filtered.length?'':'<div class="p-6">'+EmptyState(t('empty_title'),t('empty_body'))+'</div>')+
+    '</div>';
+
+  return StatePreviewBar()+PageHead(t('nav_dashboard'),esc(state.org)+' · '+(locale==='en'?'Jan–Aug 2026':'Jan – Agu 2026'),
+      '<button class="'+Btn('outline')+'" data-action="nav-go" data-to="audit">'+t('btn_open_audit')+'</button><button class="'+Btn('primary')+'" data-action="nav-go" data-to="tokenize">'+t('btn_tokenize_surplus')+'</button>')+
+    kpis+
+    '<div class="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5">'+chart+donutCard+'</div>'+
+    table;
+}
+
+function viewTracker(){
+  var d=emTotals(),tt2=d.t,f=state.f,M=MONTHS();
+  var catRows=CAT_KEYS.map(function(k){var v=0;state.entries.forEach(function(e){if(e.cat===k)v+=entryT(e)});return {k:k,v:v};}).sort(function(a,b){return b.v-a.v;});
+  var maxC=Math.max.apply(null,catRows.map(function(c){return c.v}).concat([1]));
+  var monthOpts='<option value="all">'+(locale==='en'?'All months':'Semua bulan')+'</option>'+M.map(function(m,i){return '<option value="'+i+'" '+(String(f.tMonth)===String(i)?'selected':'')+'>'+m+' 2026</option>';}).join('');
+  var addMonth=M.map(function(m,i){return '<option value="'+i+'" '+(i===8?'selected':'')+'>'+m+' 2026</option>';}).join('');
+  var addCat=CAT_KEYS.map(function(k){return '<option value="'+k+'">'+catName(k)+' (Scope '+CATS[k].scope+')</option>';}).join('');
+  return PageHead(t('nav_tracker'),locale==='en'?'Corporate activity data and monthly emissions by Scope (GHG Protocol)':'Data aktivitas korporat dan emisi bulanan menurut Scope (GHG Protocol)',
+    '<button class="'+Btn('outline')+'" data-action="export-act-csv">'+t('btn_export_csv')+'</button>')+
+  '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">'+
+    KpiCard({label:locale==='en'?'Total emissions':'Total emisi',value:fmt(tt2.all),sub:'tCO2e',bar:'bg-slate-800',statusText:'Scope 1-3',statusKind:'neutral'})+
+    KpiCard({label:'Scope 1',value:fmt(tt2[1]),sub:nf1.format(tt2.all?tt2[1]/tt2.all*100:0)+'%',bar:'bg-brand-500',statusText:locale==='en'?'Direct':'Langsung',statusKind:'ok'})+
+    KpiCard({label:'Scope 2',value:fmt(tt2[2]),sub:nf1.format(tt2.all?tt2[2]/tt2.all*100:0)+'%',bar:'bg-indigo-500',statusText:locale==='en'?'Energy':'Energi',statusKind:'info'})+
+    KpiCard({label:'Scope 3',value:fmt(tt2[3]),sub:nf1.format(tt2.all?tt2[3]/tt2.all*100:0)+'%',bar:'bg-amber-500',statusText:locale==='en'?'Value chain':'Rantai nilai',statusKind:'warn'})+
+  '</div>'+
+  '<div class="'+CARD+' p-5 mb-5"><h3 class="font-bold text-slate-900 mb-3">'+(locale==='en'?'Monthly emissions by Scope':'Emisi bulanan per Scope')+'</h3>'+stackedChart(d.monthly)+
+    '<div class="flex gap-5 text-xs text-slate-500 mt-2"><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-slate-900 inline-block"></i>Scope 1</span><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-slate-400 inline-block"></i>Scope 2</span><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-brand-600 inline-block"></i>Scope 3</span></div></div>'+
+  '<div class="grid grid-cols-1 xl:grid-cols-3 gap-5">'+
+    '<div class="'+CARD+' p-5 xl:col-span-2"><div class="flex items-center justify-between gap-3 flex-wrap mb-3"><h3 class="font-bold text-slate-900">'+(locale==='en'?'Activity data':'Data aktivitas')+' <span class="text-xs text-slate-400 font-normal" id="actCount"></span></h3>'+
+      '<div class="flex gap-2 flex-wrap"><select id="fMonth" class="'+FIELD_IN+' !w-auto text-sm">'+monthOpts+'</select><select id="fScope" class="'+FIELD_IN+' !w-auto text-sm"><option value="all">'+(locale==='en'?'All scopes':'Semua Scope')+'</option><option value="1" '+(f.tScope==='1'?'selected':'')+'>Scope 1</option><option value="2" '+(f.tScope==='2'?'selected':'')+'>Scope 2</option><option value="3" '+(f.tScope==='3'?'selected':'')+'>Scope 3</option></select></div></div>'+
+      '<div class="overflow-auto max-h-96 rounded-xl border border-slate-100"><table class="w-full text-sm"><thead class="sticky top-0"><tr class="bg-slate-50">'+
+        ['Periode','Kategori','Scope','Aktivitas','Faktor','tCO2e',''].map(function(h){return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-3 py-2.5 whitespace-nowrap">'+h+'</th>';}).join('')+
+        '</tr></thead><tbody id="actBody"></tbody></table></div>'+
+      '<p class="text-xs text-slate-400 mt-2">'+(locale==='en'?'Emission factors are illustrative for this demo. Replace with official factors before real reporting.':'Faktor emisi adalah nilai contoh untuk demo. Ganti dengan faktor resmi sebelum dipakai untuk pelaporan.')+'</p></div>'+
+    '<div class="space-y-5">'+
+      '<div class="'+CARD+' p-5"><h3 class="font-bold text-slate-900 mb-3">'+t('btn_add')+'</h3>'+
+        '<div class="mb-3"><label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Period':'Periode')+'</label><select id="addMonth" class="'+FIELD_IN+'">'+addMonth+'</select></div>'+
+        '<div class="mb-3"><label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Category':'Kategori')+'</label><select id="addCat" class="'+FIELD_IN+'">'+addCat+'</select></div>'+
+        '<div class="mb-1"><label class="text-xs font-semibold text-slate-500 block mb-1" id="addQtyLbl">'+(locale==='en'?'Activity amount':'Jumlah aktivitas')+'</label><input id="addQty" class="'+FIELD_IN+'" type="text" inputmode="decimal" placeholder="1200"></div>'+
+        '<p class="text-xs text-slate-400 mb-3" id="addPrev"></p>'+
+        '<button class="'+Btn('primary')+' w-full" data-action="add-entry">'+t('btn_add')+'</button>'+
+        '<p class="text-xs text-slate-400 mt-2">'+(locale==='en'?'Adding or removing data resets the ISO 14064 status to not verified.':'Menambah atau menghapus data mengembalikan status ISO 14064 ke belum lulus.')+'</p></div>'+
+      '<div class="'+CARD+' p-5"><h3 class="font-bold text-slate-900 mb-3">'+(locale==='en'?'By source category':'Per kategori sumber')+'</h3><div class="space-y-3">'+catRows.map(function(c){return '<div class="grid grid-cols-[110px_1fr_auto] items-center gap-2 text-xs"><span class="truncate text-slate-600">'+catName(c.k)+'</span><div class="h-2 rounded-full bg-slate-100 overflow-hidden"><div class="h-full bg-brand-500 rounded-full" style="width:'+(c.v/maxC*100)+'%"></div></div><b class="tabular-nums">'+fmt(c.v)+'</b></div>';}).join('')+'</div></div>'+
+    '</div>'+
+  '</div>';
+}
+function fillActRows(){
+  var f=state.f;
+  var rows=state.entries.filter(function(e){return (f.tMonth==='all'||String(e.m)===String(f.tMonth))&&(f.tScope==='all'||String(CATS[e.cat].scope)===String(f.tScope));}).sort(function(a,b){return b.m-a.m||b.id-a.id;});
+  $('#actCount').textContent=rows.length+' '+(locale==='en'?'rows':'baris');
+  $('#actBody').innerHTML=rows.map(function(e){
+    var c=CATS[e.cat];
+    return '<tr class="border-t border-slate-100 hover:bg-slate-50/70"><td class="px-3 py-2.5 whitespace-nowrap">'+MONTHS()[e.m]+' 2026</td><td class="px-3 py-2.5">'+catName(e.cat)+'</td>'+
+      '<td class="px-3 py-2.5">'+(c.scope===1?'<span class="'+Badge('info')+'">S1</span>':c.scope===2?'<span class="'+Badge('neutral')+'">S2</span>':'<span class="'+Badge('ok')+'">S3</span>')+'</td>'+
+      '<td class="px-3 py-2.5 text-right tabular-nums whitespace-nowrap">'+nf3.format(e.qty)+' <span class="text-slate-400 text-xs">'+catUnit(e.cat)+'</span></td>'+
+      '<td class="px-3 py-2.5 text-right tabular-nums">'+nfF.format(c.f)+'</td><td class="px-3 py-2.5 text-right font-semibold tabular-nums">'+fmtT(entryT(e))+'</td>'+
+      '<td class="px-3 py-2.5"><button class="text-xs text-rose-600 hover:underline" data-action="del-entry" data-id="'+e.id+'">'+(locale==='en'?'Remove':'Hapus')+'</button></td></tr>';
+  }).join('')||'<tr><td colspan="7" class="text-center text-slate-400 py-8">'+t('empty_title')+'</td></tr>';
+}
+function updateAddPrev(){var k=$('#addCat').value,c=CATS[k],q=parseFloat(($('#addQty').value||'').replace(',','.')); $('#addQtyLbl').textContent=(locale==='en'?'Activity amount (':'Jumlah aktivitas (')+catUnit(k)+')'; $('#addPrev').textContent=q>0?((locale==='en'?'Calculated emissions: ':'Emisi terhitung: ')+fmtT(q*c.f)+' tCO2e'):(locale==='en'?'Enter an amount to preview.':'Isi jumlah untuk melihat emisi terhitung.');}
+
+function viewAssess(){
+  var elig=eligibleTotal(),surp=surplus(),plan=state.offsetPlan,maxSlider=Math.max(20000,elig);
+  var okRegistry=state.registry.filter(function(r){return r.status==='active';}).length;
+  var rows=state.registry.map(function(r){
+    var ok=eligible(r);
+    return '<tr class="border-t border-slate-100 hover:bg-slate-50/70"><td class="px-4 py-3 font-medium">'+projName(r)+'</td><td class="px-4 py-3">'+stdBadgeHtml(r.standard)+'</td><td class="px-4 py-3">'+r.vintage+'</td>'+
+      '<td class="px-4 py-3 text-right tabular-nums">'+fmt(r.remaining)+'</td><td class="px-4 py-3">'+(r.status==='active'?'<span class="'+Badge('ok')+'">'+(locale==='en'?'Active':'Aktif')+'</span>':'<span class="'+Badge('warn')+'">Pending</span>')+'</td>'+
+      '<td class="px-4 py-3">'+(r.remaining===0?'<span class="'+Badge('neutral')+'">'+(locale==='en'?'Tokenized':'Sudah ditokenisasi')+'</span>':ok?'<span class="'+Badge('ok')+'">'+(locale==='en'?'Eligible':'Layak')+'</span>':'<span class="'+Badge('danger')+'">'+(locale==='en'?'Not eligible':'Belum layak')+'</span>')+'</td>'+
+      '<td class="px-4 py-3">'+(ok?'<button class="'+Btn('primary')+' '+Sm('')+'" data-action="goto-tok" data-id="'+r.id+'">'+t('nav_tokenize')+'</button>':'')+'</td></tr>';
+  }).join('');
+  var bar1=elig?Math.min(100,plan/elig*100):0;
+  return PageHead(t('nav_assess'),locale==='en'?'Eligibility per Verra and Gold Standard, with ISO 14064 verification':'Kelayakan kredit menurut Verra dan Gold Standard, dengan verifikasi ISO 14064')+
+  '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">'+
+    KpiCard({label:t('iso'),value:isoOk()?'✓':'!',sub:isoOk()?state.iso.date:(locale==='en'?'Not verified yet':'Belum lulus'),statusText:isoOk()?t('iso_pass'):t('iso_fail'),statusKind:isoOk()?'ok':'warn',bar:isoOk()?'bg-brand-500':'bg-amber-500'})+
+    KpiCard({label:locale==='en'?'Recognized standards':'Standar diakui',value:'2',sub:'Verra VCS · Gold Standard',statusText:locale==='en'?'Configured':'Terkonfigurasi',statusKind:'ok',bar:'bg-indigo-500'})+
+    KpiCard({label:locale==='en'?'Active registry batches':'Registry aktif',value:okRegistry+'/'+state.registry.length,sub:locale==='en'?'batches with active status':'batch berstatus aktif',statusKind:okRegistry===state.registry.length?'ok':'warn',statusText:okRegistry===state.registry.length?t('status_ready'):t('status_attention'),bar:'bg-slate-800'})+
+    KpiCard({label:t('kyb'),value:kybOk()?'✓':'!',sub:t('kpi_compliance_sub'),statusText:kybOk()?t('kyb_pass'):t('kyb_review'),statusKind:kybOk()?'ok':'warn',bar:kybOk()?'bg-brand-500':'bg-amber-500'})+
+  '</div>'+
+  '<div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-5">'+
+    '<div class="'+CARD+' p-5"><h3 class="font-bold text-slate-900 mb-4">'+(locale==='en'?'Surplus calculator':'Kalkulator surplus karbon')+'</h3>'+
+      '<div class="grid grid-cols-[1fr_auto_1fr_auto_1fr] gap-2 items-center text-center mb-4">'+
+        '<div><div class="text-[11px] text-slate-400">'+(locale==='en'?'Eligible credits':'Kredit layak')+'</div><div class="text-2xl font-extrabold tabular-nums" id="calcElig">'+fmt(elig)+'</div></div>'+
+        '<div class="text-xl text-slate-300">−</div>'+
+        '<div><div class="text-[11px] text-slate-400">'+(locale==='en'?'Internal plan':'Rencana internal')+'</div><div class="text-2xl font-extrabold tabular-nums" id="calcPlan">'+fmt(plan)+'</div></div>'+
+        '<div class="text-xl text-slate-300">=</div>'+
+        '<div class="bg-brand-50 rounded-xl p-2"><div class="text-[11px] text-brand-700">'+(locale==='en'?'Surplus':'Surplus')+'</div><div class="text-2xl font-extrabold tabular-nums text-brand-700" id="calcSurp">'+fmt(surp)+'</div></div></div>'+
+      '<div class="flex h-3 rounded-full overflow-hidden bg-slate-100 mb-2"><div id="calcBar1" class="h-full bg-slate-800" style="width:'+bar1+'%"></div><div id="calcBar2" class="h-full bg-brand-500" style="width:'+(elig?100-bar1:0)+'%"></div></div>'+
+      '<div class="flex gap-4 text-xs text-slate-500 mb-4"><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-slate-800 inline-block"></i>'+(locale==='en'?'For internal offset':'Untuk offset internal')+'</span><span class="inline-flex items-center gap-1.5"><i class="w-2.5 h-2.5 rounded-sm bg-brand-500 inline-block"></i>'+(locale==='en'?'Sellable surplus':'Surplus dijual')+'</span></div>'+
+      '<label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Internal offset plan':'Rencana offset internal')+'</label>'+
+      '<input class="rng w-full" id="offRange" type="range" min="0" max="'+maxSlider+'" step="100" value="'+plan+'">'+
+      '<input id="offNum" class="'+FIELD_IN+' mt-2 max-w-[180px]" type="text" inputmode="numeric" value="'+plan+'"></div>'+
+    '<div class="'+CARD+' p-5"><h3 class="font-bold text-slate-900 mb-4">'+(locale==='en'?'ISO 14064 verification':'Status verifikasi ISO 14064')+'</h3>'+
+      '<span class="'+Badge(isoOk()?'ok':'warn')+' !text-[13px] !px-3.5 !py-1.5 mb-4 inline-block">'+(isoOk()?'✓ '+t('iso_pass'):t('iso_fail'))+'</span>'+
+      '<dl class="grid grid-cols-[120px_1fr] gap-y-2 text-sm mb-4"><dt class="text-slate-400">'+(locale==='en'?'Verifier':'Verifikator')+'</dt><dd>VVB (contoh)</dd><dt class="text-slate-400">'+(locale==='en'?'Date':'Tanggal')+'</dt><dd>'+state.iso.date+'</dd><dt class="text-slate-400">Hash</dt><dd class="mono">'+state.iso.hash+'</dd></dl>'+
+      '<button class="'+Btn('outline')+'" data-action="iso-toggle">'+(isoOk()?(locale==='en'?'Simulate data change (reopen)':'Simulasikan data berubah'):(locale==='en'?'Simulate VVB result: pass':'Simulasikan hasil VVB: lulus'))+'</button></div>'+
+  '</div>'+
+  '<div class="'+CARD+' overflow-hidden"><h3 class="font-bold text-slate-900 p-5 pb-0">'+(locale==='en'?'Registry credits':'Kredit di registry')+'</h3><div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="bg-slate-50">'+
+    ['col_project','col_standard','col_vintage','col_remaining','col_status',''].map(function(k){return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3">'+(k?t(k):'')+'</th>';}).join('')+
+    '</tr></thead><tbody>'+rows+'</tbody></table></div></div>';
+}
+function updateCalc(){var elig=eligibleTotal(),plan=state.offsetPlan,surp=surplus(),b1=elig?Math.min(100,plan/elig*100):0; $('#calcElig').textContent=fmt(elig); $('#calcPlan').textContent=fmt(plan); $('#calcSurp').textContent=fmt(surp); $('#calcBar1').style.width=b1+'%'; $('#calcBar2').style.width=(elig?100-b1:0)+'%';}
+
+var LOCK_STEPS_ID=[['Validasi kelayakan','ISO 14064, aturan registry, dan KYB dicek'],['Kunci kredit di registry','Kredit dipindahkan ke akun kustodian ClimaLedger'],['Simpan bukti ke IPFS','Snapshot status registry disematkan sebagai CID'],['Attestation ditandatangani','Ambang 2 dari 3 penanda tangan independen']];
+var LOCK_STEPS_EN=[['Validate eligibility','ISO 14064, registry rules, and KYB are checked'],['Lock credits in registry','Credits moved to ClimaLedger custodian account'],['Pin proof to IPFS','Registry status snapshot pinned as a CID'],['Sign attestation','2-of-3 independent signer threshold']];
+function LOCK_STEPS(){return locale==='en'?LOCK_STEPS_EN:LOCK_STEPS_ID}
+function viewTokenize(){
+  var k=state.tok, elRows=state.registry.filter(eligible);
+  if(k.phase==='idle'){
+    if(!elRows.length) return PageHead(t('nav_tokenize'),locale==='en'?'Turn eligible credits into a Solana asset':'Ubah kredit yang layak menjadi aset di Solana')+
+      '<div class="rounded-xl bg-amber-50 text-amber-800 text-sm p-4">'+(locale==='en'?'No eligible credits yet. Make sure ISO 14064 passed and there is surplus.':'Belum ada kredit layak. Pastikan ISO 14064 lulus dan ada surplus.')+' <button class="'+Btn('outline')+' '+Sm('ml-2')+'" data-action="nav-go" data-to="assess">'+t('nav_assess')+'</button></div>';
+    if(!k.rowId||!elRows.some(function(r){return r.id===k.rowId})){k.rowId=elRows[0].id; k.amount=Math.min(elRows[0].remaining,surplus());}
+  }
+  var row=state.registry.filter(function(r){return r.id===k.rowId})[0];
+  var locking=k.phase==='locking', locked=k.phase==='locked'||k.phase==='minting', done=k.phase==='minted', progress=done?100:k.progress;
+  var head=PageHead(t('nav_tokenize'),locale==='en'?'Turn eligible credits into a Solana asset (Token-2022)':'Ubah kredit yang layak menjadi aset di Solana (Token-2022)');
+  if(done){
+    var r=k.result;
+    return head+'<div class="'+CARD+' p-6"><div class="flex items-center gap-3 mb-4"><span class="'+Badge('ok')+'">✓ '+(locale==='en'?'Mint successful':'Mint berhasil')+'</span><b class="text-lg">'+fmtA(r.amount)+' tCO2e → '+r.code+'</b></div>'+
+      '<div class="h-2.5 rounded-full bg-brand-500 mb-5"></div>'+
+      '<dl class="grid grid-cols-[140px_1fr] gap-y-2.5 text-sm">'+
+      '<dt class="text-slate-400">Mint address</dt><dd class="mono break-all">'+r.mint+'</dd><dt class="text-slate-400">Token account</dt><dd class="mono break-all">'+r.ata+'</dd>'+
+      '<dt class="text-slate-400">'+(locale==='en'?'On-chain amount':'Jumlah on-chain')+'</dt><dd class="mono">'+fmt(r.amount*1000)+' unit</dd>'+
+      '<dt class="text-slate-400">Signature</dt><dd class="mono break-all">'+r.sig+' <button class="text-brand-700 font-semibold" data-action="copy" data-copy="'+r.sig+'">'+t('btn_copy')+'</button></dd>'+
+      '<dt class="text-slate-400">Slot</dt><dd class="mono">'+fmt(r.slot)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Network':'Jaringan')+'</dt><dd>Solana '+state.cluster+' (simulasi)</dd>'+
+      (r.intentSig?'<dt class="text-slate-400">Phantom signature</dt><dd class="mono">'+short(r.intentSig,12,8)+' <span class="'+Badge('ok')+'">'+(locale==='en'?'real':'nyata')+'</span></dd>':'')+'</dl>'+
+      '<div class="flex gap-2 flex-wrap mt-6"><button class="'+Btn('primary')+'" data-action="nav-go" data-to="portfolio">'+t('nav_portfolio')+'</button><button class="'+Btn('outline')+'" data-action="tx-open" data-id="'+r.evId+'">'+(locale==='en'?'Open in explorer':'Buka di explorer')+'</button><button class="'+Btn('outline')+'" data-action="tok-again">'+(locale==='en'?'Tokenize again':'Tokenisasi lagi')+'</button></div></div>';
+  }
+  var steps=LOCK_STEPS().map(function(s,i){
+    var st= k.phase==='idle'?'':(i<k.stepIdx||(k.phase!=='idle'&&k.phase!=='locking'))?'done':(locking&&i===k.stepIdx?'run':'');
+    return '<div class="flex items-center gap-3 rounded-xl border p-3 '+(st==='run'?'border-brand-300 bg-brand-50/60':'border-slate-200 bg-white')+'"><div class="w-7 h-7 rounded-full grid place-items-center text-xs font-bold shrink-0 '+(st==='done'?'bg-brand-500 text-white':st==='run'?'bg-slate-900 text-white':'bg-slate-100 text-slate-400')+'">'+(st==='done'?'✓':(i+1))+'</div><div class="min-w-0 flex-1"><div class="font-semibold text-sm">'+s[0]+'</div><div class="text-xs text-slate-400">'+s[1]+'</div></div>'+(st==='run'?'<span class="spin dk"></span>':st==='done'?'<span class="'+Badge('ok')+'">'+(locale==='en'?'Done':'Selesai')+'</span>':'<span class="'+Badge('neutral')+'">'+(locale==='en'?'Waiting':'Menunggu')+'</span>')+'</div>';
+  }).join('');
+  var opts=state.registry.filter(function(r){return eligible(r)||r.id===k.rowId;}).map(function(r){return '<option value="'+r.id+'" '+(r.id===k.rowId?'selected':'')+'>'+projName(r)+' ('+fmt(r.remaining)+' t)</option>';}).join('');
+  var cap=row?Math.min(row.remaining+(k.phase==='idle'?0:k.locked),Math.max(surplus(),k.locked)):0;
+  return head+'<div class="grid grid-cols-1 xl:grid-cols-2 gap-5">'+
+    '<div class="'+CARD+' p-6"><div class="flex items-center justify-between mb-3"><h3 class="font-bold text-slate-900">'+(locale==='en'?'Locking progress':'Progres penguncian')+'</h3><span class="text-sm font-bold text-brand-700">'+Math.round(progress)+'%</span></div>'+
+      '<div class="h-2.5 rounded-full bg-slate-100 overflow-hidden mb-5"><div class="h-full bg-gradient-to-r from-slate-800 to-brand-500 transition-all duration-500" style="width:'+progress+'%"></div></div>'+
+      '<div class="space-y-2.5">'+steps+'</div>'+
+      '<div class="flex gap-2 flex-wrap mt-5">'+
+        (k.phase==='idle'?'<button class="'+Btn('primary')+' w-full" data-action="tok-start">'+(locale==='en'?'Start locking credits':'Mulai penguncian kredit')+'</button>':
+         locking?'<button class="'+Btn('primary')+' w-full" disabled><span class="spin"></span> '+(locale==='en'?'Locking…':'Mengunci…')+'</button>':
+         '<button class="'+Btn('primary')+' w-full !py-3.5 !text-base" '+(k.phase==='minting'?'disabled':'')+' data-action="tok-mint">'+(k.phase==='minting'?'<span class="spin"></span> '+(locale==='en'?'Sending transaction…':'Mengirim transaksi…'):'Mint Token')+'</button><button class="'+Btn('outline')+'" '+(k.phase==='minting'?'disabled':'')+' data-action="tok-cancel">'+(locale==='en'?'Cancel lock':'Batalkan penguncian')+'</button>')+
+      '</div>'+
+      (locked?'<div class="rounded-xl bg-brand-50 text-brand-800 text-sm p-3 mt-4">'+(locale==='en'?'Credits locked and attestation ready. Press Mint Token to issue on Solana.':'Kredit terkunci dan attestation siap. Tekan Mint Token untuk menerbitkan token di Solana.')+'</div>':'')+
+    '</div>'+
+    '<div class="'+CARD+' p-6"><h3 class="font-bold text-slate-900 mb-4">'+(locale==='en'?'Token details':'Detail token')+'</h3>'+
+      '<div class="mb-3"><label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Registry batch':'Batch registry')+'</label><select id="tokRow" class="'+FIELD_IN+'" '+(k.phase!=='idle'?'disabled':'')+'>'+opts+'</select></div>'+
+      '<div class="mb-1"><label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Amount (tCO2e)':'Jumlah (tCO2e)')+'</label><input id="tokAmt" class="'+FIELD_IN+'" type="text" inputmode="decimal" value="'+k.amount+'" '+(k.phase!=='idle'?'disabled':'')+'></div>'+
+      '<p class="text-xs text-slate-400 mb-4">'+(locale==='en'?'Max':'Maksimum')+' '+fmt(cap)+' tCO2e</p>'+
+      '<dl class="grid grid-cols-[110px_1fr] gap-y-2 text-sm"><dt class="text-slate-400">'+(locale==='en'?'Standard':'Standar')+'</dt><dd>Token-2022</dd><dt class="text-slate-400">'+(locale==='en'?'Decimals':'Desimal')+'</dt><dd>3</dd><dt class="text-slate-400">Units</dt><dd class="mono" id="tokUnits">'+fmt(k.amount*1000)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Network':'Jaringan')+'</dt><dd>Solana '+state.cluster+'</dd><dt class="text-slate-400">'+(locale==='en'?'Batch code':'Kode batch')+'</dt><dd class="mono">CL-'+(row?row.standard:'')+'-0'+state.batchSeq+'</dd></dl></div>'+
+  '</div>';
+}
+var lockTimer=null;
+function startLock(){
+  var k=state.tok, row=state.registry.filter(function(r){return r.id===k.rowId})[0], amt=parseFloat(String($('#tokAmt').value).replace(',','.')), cap=Math.min(row.remaining,surplus());
+  if(!(amt>0)||amt>cap){toast((locale==='en'?'Amount must be between 1 and ':'Jumlah harus antara 1 dan ')+fmt(cap)+' tCO2e'); return;}
+  if(!kybOk()){toast(locale==='en'?'Rejected by ComplianceRegistry: KYB not passed':'Ditolak ComplianceRegistry: KYB belum lolos'); go('settings'); return;}
+  k.amount=amt; k.phase='locking'; k.stepIdx=0; k.progress=6; render(); clearInterval(lockTimer);
+  lockTimer=setInterval(function(){
+    k.stepIdx++; k.progress=Math.min(100,(k.stepIdx)/LOCK_STEPS().length*100);
+    if(k.stepIdx>=LOCK_STEPS().length){clearInterval(lockTimer); k.phase='locked'; k.progress=100; k.stepIdx=LOCK_STEPS().length; row.remaining-=amt; k.locked=amt;}
+    if(state.view==='tokenize') render();
+  },800);
+}
+function cancelLock(){var k=state.tok,row=state.registry.filter(function(r){return r.id===k.rowId})[0]; if(row&&k.locked) row.remaining+=k.locked; clearInterval(lockTimer); state.tok={rowId:k.rowId,amount:k.locked||k.amount,phase:'idle',stepIdx:-1,progress:0,result:null,locked:0}; render();}
+async function doMint(){
+  var k=state.tok,row=state.registry.filter(function(r){return r.id===k.rowId})[0],code='CL-'+row.standard+'-0'+state.batchSeq;
+  var isig=await guard('ClimaLedger mint '+code+' '+k.amount+' tCO2e'); if(!isig) return;
+  k.phase='minting'; render();
+  setTimeout(function(){
+    var mint=newAddr(),ata=newAddr();
+    mkEvent('Attestation',code,k.amount,new Date(),{memo:'attestation 2/3 signer'});
+    var ev=mkEvent('Mint',code,k.amount,new Date(),{mint:mint,ata:ata,intentSig:state.wallet.mode==='phantom'?isig:null});
+    var h=ensureHolding(code,{project:row.project,project_en:row.project_en,standard:row.standard,vintage:row.vintage});
+    h.minted+=k.amount; h.balance+=k.amount; state.batchSeq++;
+    k.result={code:code,amount:k.amount,mint:mint,ata:ata,sig:ev.sig,slot:ev.slot,evId:ev.id,intentSig:state.wallet.mode==='phantom'?isig:null};
+    k.phase='minted'; k.locked=0; toast((locale==='en'?'Token minted on Solana ':'Token berhasil dicetak di Solana ')+state.cluster+' (simulasi)'); render();
+  },1100);
+}
+
+function filteredListings(){var f=state.f,q=f.mQ.trim().toLowerCase(); var r=state.listings.filter(function(l){return (f.mStd==='all'||l.standard===f.mStd)&&(!q||(l.project+' '+l.code).toLowerCase().indexOf(q)>=0);}); r.sort(function(a,b){return f.mSort==='price-asc'?a.price-b.price:f.mSort==='price-desc'?b.price-a.price:b.available-a.available;}); return r;}
+function viewMarket(){
+  var f=state.f,tot=state.listings.reduce(function(a,l){return a+l.available;},0),wavg=tot?state.listings.reduce(function(a,l){return a+l.available*l.price;},0)/tot:0;
+  return PageHead(t('nav_market'),locale==='en'?'Available carbon credit listings, priced in USDC':'Listing kredit karbon yang tersedia, harga dalam USDC')+
+  '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">'+
+    KpiCard({label:locale==='en'?'Active listings':'Listing aktif',value:state.listings.length,sub:locale==='en'?'batches available':'batch tersedia',bar:'bg-slate-800',statusKind:'neutral',statusText:'—'})+
+    KpiCard({label:locale==='en'?'Available volume':'Volume tersedia',value:fmt(tot),sub:'tCO2e',bar:'bg-brand-500',statusKind:'ok',statusText:t('status_ready')})+
+    KpiCard({label:locale==='en'?'Weighted avg price':'Harga rata-rata',value:usd(wavg),sub:'USDC/tCO2e',bar:'bg-indigo-500',statusKind:'info',statusText:'USDC'})+
+    KpiCard({label:locale==='en'?'Your USDC balance':'Saldo USDC Anda',value:usd(state.usdc),sub:locale==='en'?'company wallet':'wallet perusahaan',bar:'bg-slate-800',statusKind:'neutral',statusText:'USDC'})+
+  '</div>'+
+  '<div class="'+CARD+' overflow-hidden"><div class="p-5 flex flex-wrap gap-2 items-center">'+
+    ['all','VCS','GS'].map(function(v){return '<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold '+(f.mStd===v?'bg-slate-900 text-white':'bg-white border border-slate-200 text-slate-600 hover:border-slate-300')+'" data-action="m-std" data-v="'+v+'">'+(v==='all'?(locale==='en'?'All standards':'Semua standar'):stdName(v))+'</button>';}).join('')+
+    '<input type="search" id="mQ" class="'+FIELD_IN+' !w-auto min-w-[180px]" placeholder="'+(locale==='en'?'Search project or code':'Cari proyek atau kode')+'" value="'+esc(f.mQ)+'">'+
+    '<select id="mSort" class="'+FIELD_IN+' !w-auto"><option value="price-asc" '+(f.mSort==='price-asc'?'selected':'')+'>'+(locale==='en'?'Lowest price':'Harga terendah')+'</option><option value="price-desc" '+(f.mSort==='price-desc'?'selected':'')+'>'+(locale==='en'?'Highest price':'Harga tertinggi')+'</option><option value="vol" '+(f.mSort==='vol'?'selected':'')+'>'+(locale==='en'?'Largest volume':'Volume terbesar')+'</option></select></div>'+
+    '<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="bg-slate-50">'+
+    ['Batch','Proyek/Project','Standar/Standard','Vintage',locale==='en'?'Seller':'Penjual',locale==='en'?'Available':'Tersedia','Price/Harga',''].map(function(h){return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3 whitespace-nowrap">'+h+'</th>';}).join('')+
+    '</tr></thead><tbody id="mBody"></tbody></table></div></div>';
+}
+function fillMarketRows(){
+  $('#mBody').innerHTML=filteredListings().map(function(l){
+    return '<tr class="border-t border-slate-100 hover:bg-slate-50/70"><td class="px-4 py-3 mono">'+l.code+(l.mine?' <span class="'+Badge('info')+' ml-1">'+(locale==='en'?'Yours':'Milik Anda')+'</span>':'')+'</td>'+
+      '<td class="px-4 py-3">'+(locale==='en'&&l.project_en?l.project_en:l.project)+'</td><td class="px-4 py-3">'+stdBadgeHtml(l.standard)+'</td><td class="px-4 py-3">'+l.vintage+'</td>'+
+      '<td class="px-4 py-3 mono text-slate-400">'+(l.mine?'—':short(l.seller,4,4))+'</td><td class="px-4 py-3 text-right tabular-nums">'+fmt(l.available)+'</td><td class="px-4 py-3 text-right font-bold tabular-nums">'+usd(l.price)+'</td>'+
+      '<td class="px-4 py-3">'+(l.mine?'<button class="text-xs text-rose-600 font-semibold hover:underline" data-action="cancel-listing" data-id="'+l.id+'">'+t('btn_cancel')+'</button>':'<button class="'+Btn('primary')+' '+Sm('')+'" data-action="buy-open" data-id="'+l.id+'">'+(locale==='en'?'Buy':'Beli')+'</button>')+'</td></tr>';
+  }).join('')||'<tr><td colspan="8" class="text-center text-slate-400 py-10">'+t('empty_title')+'</td></tr>';
+}
+
+function viewPortfolio(){
+  var live=state.holdings.filter(function(h){return h.balance+h.listed>0;});
+  var certRows=state.certs.map(function(c){return '<tr class="border-t border-slate-100 hover:bg-slate-50/70"><td class="px-4 py-3 mono">CL-RET-2026-'+c.id+'</td><td class="px-4 py-3 mono">'+c.code+'</td><td class="px-4 py-3 text-right tabular-nums">'+fmtA(c.amount)+'</td><td class="px-4 py-3">'+esc(c.beneficiary)+'</td><td class="px-4 py-3 text-slate-500">'+fdate(c.time)+'</td><td class="px-4 py-3"><button class="'+Btn('outline')+' '+Sm('')+'" data-action="cert-open" data-id="'+c.id+'">'+(locale==='en'?'View':'Lihat')+'</button></td></tr>';}).join('');
+  var hold=live.length?('<div class="overflow-x-auto"><table class="w-full text-sm"><thead><tr class="bg-slate-50">'+
+    ['Batch','Proyek/Project','Standar/Standard','Vintage',locale==='en'?'Balance':'Saldo',locale==='en'?'Listed':'Di listing',locale==='en'?'Retired':'Diretire',''].map(function(h){return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3 whitespace-nowrap">'+h+'</th>';}).join('')+
+    '</tr></thead><tbody>'+live.map(function(h){return '<tr class="border-t border-slate-100 hover:bg-slate-50/70"><td class="px-4 py-3 mono">'+h.code+'</td><td class="px-4 py-3">'+holdProjName(h)+'</td><td class="px-4 py-3">'+stdBadgeHtml(h.standard)+'</td><td class="px-4 py-3">'+h.vintage+'</td><td class="px-4 py-3 text-right font-bold tabular-nums">'+fmtA(h.balance)+'</td><td class="px-4 py-3 text-right tabular-nums">'+fmtA(h.listed)+'</td><td class="px-4 py-3 text-right tabular-nums">'+fmtA(h.retired)+'</td><td class="px-4 py-3">'+(h.balance>0?'<div class="flex gap-2"><button class="'+Btn('primary')+' '+Sm('')+'" data-action="retire-open" data-code="'+h.code+'">Retire</button><button class="'+Btn('outline')+' '+Sm('')+'" data-action="list-open" data-code="'+h.code+'">'+(locale==='en'?'Sell':'Jual')+'</button></div>':'—')+'</td></tr>';}).join('')+'</tbody></table></div>'):
+    EmptyState(locale==='en'?'No tokens in portfolio yet':'Belum ada token di portofolio',locale==='en'?'Tokenize your surplus or buy from the marketplace.':'Tokenisasi surplus atau beli dari marketplace.','<div class="flex gap-2 justify-center"><button class="'+Btn('primary')+'" data-action="nav-go" data-to="tokenize">'+t('nav_tokenize')+'</button><button class="'+Btn('outline')+'" data-action="nav-go" data-to="market">'+t('nav_market')+'</button></div>');
+  var bal=state.holdings.reduce(function(a,h){return a+h.balance;},0), lst=state.holdings.reduce(function(a,h){return a+h.listed;},0);
+  return PageHead(t('nav_portfolio'),locale==='en'?'Carbon tokens owned by the company and climate offset claims':'Token karbon yang dimiliki perusahaan dan klaim offset iklim')+
+  '<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-5">'+
+    KpiCard({label:locale==='en'?'Token balance':'Saldo token',value:fmtA(bal),sub:'tCO2e',bar:'bg-indigo-500',statusKind:'info',statusText:'wallet'})+
+    KpiCard({label:locale==='en'?'In escrow':'Di escrow',value:fmtA(lst),sub:'tCO2e',bar:'bg-amber-500',statusKind:'warn',statusText:'escrow'})+
+    KpiCard({label:locale==='en'?'Retired total':'Sudah diretire',value:fmtA(retiredTotal()),sub:'tCO2e',bar:'bg-brand-500',statusKind:'ok',statusText:t('status_ready')})+
+  '</div>'+
+  '<div class="'+CARD+' p-5 mb-5 overflow-hidden"><h3 class="font-bold text-slate-900 mb-4">'+(locale==='en'?'Tokens held':'Token yang dimiliki')+'</h3>'+hold+'</div>'+
+  '<div class="'+CARD+' overflow-hidden"><h3 class="font-bold text-slate-900 p-5 pb-0">'+(locale==='en'?'Retirement certificates':'Sertifikat retirement')+'</h3>'+(certRows?'<div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="bg-slate-50">'+['No.','Batch',locale==='en'?'tCO2e':'tCO2e',locale==='en'?'Beneficiary':'Penerima manfaat',locale==='en'?'Time':'Waktu',''].map(function(h){return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3">'+h+'</th>';}).join('')+'</tr></thead><tbody>'+certRows+'</tbody></table></div>':'<div class="p-6">'+EmptyState(t('empty_title'),locale==='en'?'No retirements yet.':'Belum ada retirement.')+'</div>')+'</div>';
+}
+
+function viewAudit(){
+  var tot=state.ledger.length,types=['all','Mint','Pembelian','Listing','Retirement','Attestation'],f=state.f;
+  var rec=state.holdings.filter(function(h){return h.minted>0;}).map(function(h){var s=h.balance+h.listed+h.retired,ok=Math.abs(s-h.minted)<1e-9; return '<tr class="border-t border-slate-100"><td class="px-4 py-3 mono">'+h.code+'</td><td class="px-4 py-3 text-right tabular-nums">'+fmtA(h.minted)+'</td><td class="px-4 py-3 text-right tabular-nums">'+fmtA(s)+'</td><td class="px-4 py-3">'+(ok?'<span class="'+Badge('ok')+'">'+(locale==='en'?'Match':'Cocok')+'</span>':'<span class="'+Badge('danger')+'">'+(locale==='en'?'Mismatch':'Selisih')+'</span>')+'</td></tr>';}).join('')||'<tr><td colspan="4" class="text-center text-slate-400 py-6">'+t('empty_title')+'</td></tr>';
+  return PageHead(t('nav_audit'),locale==='en'?'A transaction trail like an internal blockchain explorer, with export for reporting':'Jejak transaksi seperti explorer blockchain internal, dengan ekspor untuk pelaporan',
+    '<button class="'+Btn('outline')+'" data-action="export-csv">'+t('btn_export_csv')+'</button><button class="'+Btn('primary')+'" data-action="export-pdf">'+t('btn_export_pdf')+'</button>')+
+  '<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">'+
+    KpiCard({label:locale==='en'?'Total transactions':'Total transaksi',value:tot,sub:locale==='en'?'recorded in ledger':'tercatat di ledger',bar:'bg-slate-800',statusKind:'neutral',statusText:'—'})+
+    KpiCard({label:locale==='en'?'Finality':'Status',value:'100%',sub:'Finalized',bar:'bg-brand-500',statusKind:'ok',statusText:'Finalized'})+
+    KpiCard({label:locale==='en'?'Latest slot':'Slot terbaru',value:fmt(state.ledger[0]?state.ledger[0].slot:0),sub:'Solana '+state.cluster,bar:'bg-indigo-500',statusKind:'info',statusText:'Solana'})+
+    KpiCard({label:locale==='en'?'Total retired':'Total diretire',value:fmtA(retiredTotal()),sub:'tCO2e',bar:'bg-brand-500',statusKind:'ok',statusText:t('status_ready')})+
+  '</div>'+
+  '<div class="'+CARD+' overflow-hidden mb-5"><div class="p-5 flex flex-wrap gap-2 items-center">'+
+    types.map(function(tp){return '<button class="px-3.5 py-1.5 rounded-full text-xs font-semibold '+(f.aType===tp?'bg-slate-900 text-white':'bg-white border border-slate-200 text-slate-600 hover:border-slate-300')+'" data-action="a-type" data-v="'+tp+'">'+(tp==='all'?(locale==='en'?'All types':'Semua jenis'):tp)+'</button>';}).join('')+
+    '<input type="search" id="aQ" class="'+FIELD_IN+' !w-auto min-w-[200px]" placeholder="'+(locale==='en'?'Search signature, batch, or slot':'Cari signature, batch, atau slot')+'" value="'+esc(f.aQ)+'"></div>'+
+    '<div class="overflow-x-auto max-h-96 overflow-y-auto"><table class="w-full text-sm"><thead class="sticky top-0"><tr class="bg-slate-50">'+['Signature','Type','Summary','Slot','Time','Status'].map(function(h){return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3 whitespace-nowrap">'+h+'</th>';}).join('')+'</tr></thead><tbody id="aBody"></tbody></table></div>'+
+    '<p class="text-xs text-slate-400 p-5 pt-3">'+(locale==='en'?'Click a row for explorer-style detail: signature, slot, signer, fee, compute units, balance changes, and raw data.':'Klik baris untuk detail seperti explorer: signature, slot, signer, fee, compute units, perubahan saldo, dan data mentah.')+'</p></div>'+
+  '<div class="'+CARD+' overflow-hidden"><h3 class="font-bold text-slate-900 p-5 pb-0">'+(locale==='en'?'Tokenized-batch reconciliation':'Rekonsiliasi batch hasil tokenisasi')+'</h3><div class="overflow-x-auto mt-4"><table class="w-full text-sm"><thead><tr class="bg-slate-50">'+['Batch',locale==='en'?'Minted':'Dicetak',locale==='en'?'Balance+listed+retired':'Saldo+listing+retire','Status'].map(function(h){return '<th class="text-left text-[11px] font-bold uppercase tracking-wide text-slate-500 px-4 py-3">'+h+'</th>';}).join('')+'</tr></thead><tbody>'+rec+'</tbody></table></div><p class="text-xs text-slate-400 p-5 pt-3">'+(locale==='en'?'Purchased credits are excluded since their mint origin sits outside this system.':'Token hasil pembelian tidak dimasukkan karena asal mint-nya berada di luar sistem ini.')+'</p></div>';
+}
+function fillAuditRows(){
+  var f=state.f,q=f.aQ.trim().toLowerCase();
+  var rows=state.ledger.filter(function(e){return (f.aType==='all'||e.type===f.aType)&&(!q||(e.sig+' '+e.code+' '+e.slot+' '+e.type).toLowerCase().indexOf(q)>=0);});
+  $('#aBody').innerHTML=rows.map(function(e){return '<tr class="border-t border-slate-100 hover:bg-slate-50/70 cursor-pointer" data-action="tx-open" data-id="'+e.id+'"><td class="px-4 py-3 mono">'+short(e.sig,7,5)+'</td><td class="px-4 py-3">'+typeBadgeHtml(e.type)+'</td><td class="px-4 py-3">'+esc(summary(e))+'</td><td class="px-4 py-3 mono">'+fmt(e.slot)+'</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap">'+fdate(e.time)+'</td><td class="px-4 py-3">'+'<span class="'+Badge('ok')+'">Finalized</span>'+'</td></tr>';}).join('')||'<tr><td colspan="6" class="text-center text-slate-400 py-10">'+t('empty_title')+'</td></tr>';
+}
+
+function kybStatusBadge(s){return s==='verified'?'<span class="'+Badge('ok')+'">'+t('kyb_pass')+'</span>':s==='pending'?'<span class="'+Badge('warn')+'">'+(locale==='en'?'In review':'Menunggu tinjauan')+'</span>':'<span class="'+Badge('danger')+'">'+(locale==='en'?'Missing':'Belum ada')+'</span>';}
+function viewSettings(){
+  var w=state.wallet, ok=kybOk();
+  var steps=state.kyb.map(function(s){
+    return '<div class="flex items-center gap-3 rounded-xl border border-slate-200 p-3.5"><div class="w-7 h-7 rounded-full grid place-items-center text-xs font-bold shrink-0 '+(s.status==='verified'?'bg-brand-500 text-white':s.status==='pending'?'bg-amber-400 text-white':'bg-rose-400 text-white')+'">'+(s.status==='verified'?'✓':s.status==='pending'?'…':'!')+'</div><div class="min-w-0 flex-1"><div class="font-semibold text-sm">'+kybName(s)+'</div><div class="text-xs text-slate-400">'+(s.file?(locale==='en'?'File: ':'Berkas: ')+esc(s.file)+' · ':'')+kybDetail(s)+'</div></div>'+
+      '<div class="flex items-center gap-2 shrink-0">'+kybStatusBadge(s.status)+(s.status==='pending'?'<button class="'+Btn('primary')+' '+Sm('')+'" data-action="kyb-approve" data-id="'+s.id+'">'+t('btn_approve_sim')+'</button>':'<button class="'+Btn('outline')+' '+Sm('')+'" data-action="kyb-upload" data-id="'+s.id+'">'+t('btn_reupload')+'</button>')+'</div></div>';
+  }).join('');
+  return PageHead(t('nav_settings'),locale==='en'?'KYB verification, wallet connection, and appearance':'Verifikasi KYB, koneksi wallet, dan tampilan')+
+  '<div class="grid grid-cols-1 xl:grid-cols-2 gap-5 mb-5">'+
+    '<div class="'+CARD+' p-5"><div class="flex items-center justify-between mb-4"><h3 class="font-bold text-slate-900">'+t('settings_kyb_title')+'</h3><span class="'+Badge(ok?'ok':'warn')+'">'+(ok?'✓ '+t('kyb_pass'):t('kyb_review'))+'</span></div>'+
+      '<div class="rounded-xl p-3.5 text-sm mb-4 '+(ok?'bg-brand-50 text-brand-800':'bg-amber-50 text-amber-800')+'">'+(ok?(locale==='en'?'Company passed KYB and the wallet is allowlisted. Mint, purchase, and retire are permitted.':'Perusahaan lolos KYB dan wallet ada di allowlist. Mint, pembelian, dan retire diizinkan.'):(locale==='en'?'KYB incomplete. ComplianceRegistry will reject mint, purchase, and retire until all steps verify.':'KYB belum lengkap. ComplianceRegistry menolak mint, pembelian, dan retire sampai semua langkah terverifikasi.'))+'</div>'+
+      '<div class="space-y-2.5">'+steps+'</div></div>'+
+    '<div class="space-y-5">'+
+      '<div class="'+CARD+' p-5"><h3 class="font-bold text-slate-900 mb-3">'+t('settings_wallet_title')+'</h3>'+
+        '<div class="flex items-center gap-2 mb-3"><span class="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full border '+(w.connected?'border-brand-200 bg-brand-50 text-brand-700':'border-slate-200 bg-slate-50 text-slate-500')+'"><i class="w-2 h-2 rounded-full '+(w.connected?'bg-brand-500':'bg-slate-300')+'"></i>'+(w.connected?t('wallet_connected'):t('wallet_disconnected'))+'</span>'+(w.connected?'<span class="'+Badge(w.mode==='phantom'?'ok':'neutral')+'">'+(w.mode==='phantom'?'Phantom':(locale==='en'?'Demo mode':'Mode demo'))+'</span>':'')+'</div>'+
+        (w.connected?('<dl class="grid grid-cols-[90px_1fr] gap-y-2 text-sm mb-3"><dt class="text-slate-400">'+(locale==='en'?'Address':'Alamat')+'</dt><dd class="mono break-all">'+w.address+' <button class="text-brand-700 font-semibold" data-action="copy" data-copy="'+w.address+'">'+t('btn_copy')+'</button></dd><dt class="text-slate-400">'+(locale==='en'?'Network':'Jaringan')+'</dt><dd><select id="netSel" class="'+FIELD_IN+' !w-auto !py-1"><option value="devnet" '+(state.cluster==='devnet'?'selected':'')+'>Devnet</option><option value="mainnet-beta" '+(state.cluster==='mainnet-beta'?'selected':'')+'>Mainnet-beta</option></select></dd><dt class="text-slate-400">USDC</dt><dd>'+usd(state.usdc)+'</dd></dl>'):'<p class="text-sm text-slate-500 mb-3">'+(locale==='en'?'Connect a wallet to sign mint, purchase, and retire actions.':'Hubungkan wallet untuk menandatangani mint, pembelian, dan retire.')+'</p>')+
+        '<div class="flex gap-2">'+(w.connected?'<button class="'+Btn('outline')+'" data-action="disconnect">'+(locale==='en'?'Disconnect':'Putuskan')+'</button>':'')+'<button class="'+Btn('primary')+'" data-action="connect-open">'+(w.connected?(locale==='en'?'Switch wallet':'Ganti wallet'):t('wallet_connect'))+'</button></div>'+
+        '<p class="text-xs text-slate-400 mt-3">'+(locale==='en'?'Demo mode uses a simulated wallet. With real Phantom, message signing is requested from your extension; on-chain sending stays simulated in this prototype.':'Mode demo memakai wallet simulasi. Dengan Phantom asli, tanda tangan pesan diminta dari ekstensi Anda; pengiriman on-chain tetap disimulasikan.')+'</p></div>'+
+      '<div class="'+CARD+' p-5"><h3 class="font-bold text-slate-900 mb-3">'+t('settings_profile_title')+'</h3><dl class="grid grid-cols-[110px_1fr] gap-y-2 text-sm"><dt class="text-slate-400">'+(locale==='en'?'Name':'Nama')+'</dt><dd>'+esc(state.org)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Sector':'Sektor')+'</dt><dd>'+(locale==='en'?'Energy':'Energi')+'</dd><dt class="text-slate-400">'+(locale==='en'?'Reporting period':'Periode pelaporan')+'</dt><dd>'+(locale==='en'?'Calendar year 2026':'Tahun kalender 2026')+'</dd></dl></div>'+
+    '</div></div>';
+}
+
+/* ================= render ================= */
+function render(){
+  document.documentElement.lang=locale;
+  renderNav();
+  $('#orgName').textContent=state.org;
+  var w=state.wallet;
+  $('#topRight').innerHTML=
+    '<div class="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600"><i class="w-1.5 h-1.5 rounded-full bg-sol-500 inline-block"></i>Solana '+(state.cluster==='devnet'?'Devnet':'Mainnet')+'</div>'+
+    '<div class="hidden sm:inline-flex items-center rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600">USDC '+usd(state.usdc)+'</div>'+
+    '<div class="inline-flex rounded-full border border-slate-200 overflow-hidden text-xs font-bold">'+
+      '<button class="px-2.5 py-1.5 '+(locale==='id'?'bg-slate-900 text-white':'bg-white text-slate-500')+'" data-action="set-locale" data-v="id">ID</button>'+
+      '<button class="px-2.5 py-1.5 '+(locale==='en'?'bg-slate-900 text-white':'bg-white text-slate-500')+'" data-action="set-locale" data-v="en">EN</button></div>'+
+    '<button class="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold '+(w.connected?'bg-brand-50 text-brand-700 border border-brand-200':'bg-slate-900 text-white')+'" data-action="'+(w.connected?'nav-go':'connect-open')+'" data-to="settings"><i class="w-1.5 h-1.5 rounded-full '+(w.connected?'bg-brand-500':'bg-white/60')+' inline-block"></i>'+(w.connected?short(w.address,4,4)+(w.mode==='demo'?' '+t('wallet_demo'):''):t('wallet_connect'))+'</button>';
+  $('#sideFoot').innerHTML='<div class="flex justify-between"><span>'+t('kyb')+'</span><b class="'+(kybOk()?'text-brand-400':'text-amber-400')+'">'+(kybOk()?t('kyb_pass'):t('kyb_review'))+'</b></div><div class="flex justify-between"><span>'+t('iso')+'</span><b class="'+(isoOk()?'text-brand-400':'text-amber-400')+'">'+(isoOk()?t('iso_pass'):t('iso_fail'))+'</b></div>';
+  var map={dashboard:viewDashboard,tracker:viewTracker,assess:viewAssess,tokenize:viewTokenize,market:viewMarket,portfolio:viewPortfolio,audit:viewAudit,settings:viewSettings};
+  $('#view').innerHTML=map[state.view]();
+  if(state.view==='tracker'){fillActRows(); updateAddPrev();}
+  if(state.view==='market') fillMarketRows();
+  if(state.view==='audit') fillAuditRows();
+}
+
+/* ================= modals ================= */
+function openTx(id){
+  var e=state.ledger.filter(function(x){return x.id===id})[0]; if(!e) return;
+  var bal='';
+  if(e.type==='Mint') bal='<tr><td class="px-3 py-2 mono">'+short(e.ata||state.wallet.address,6,4)+'</td><td class="px-3 py-2">'+e.code+'</td><td class="px-3 py-2 text-right text-brand-700 font-semibold">+'+fmt(e.amount*1000)+'</td></tr>';
+  else if(e.type==='Retirement') bal='<tr><td class="px-3 py-2 mono">'+short(state.wallet.address||'wallet',6,4)+'</td><td class="px-3 py-2">'+e.code+'</td><td class="px-3 py-2 text-right text-rose-600 font-semibold">−'+fmt(e.amount*1000)+' (burn)</td></tr>';
+  else if(e.type==='Pembelian') bal='<tr><td class="px-3 py-2 mono">'+short(state.wallet.address||'wallet',6,4)+'</td><td class="px-3 py-2">'+e.code+'</td><td class="px-3 py-2 text-right text-brand-700 font-semibold">+'+fmt(e.amount*1000)+'</td></tr><tr><td class="px-3 py-2 mono">'+short(state.wallet.address||'wallet',6,4)+'</td><td class="px-3 py-2">USDC</td><td class="px-3 py-2 text-right text-rose-600 font-semibold">−'+usd(e.usdc)+'</td></tr>';
+  else if(e.type==='Listing') bal='<tr><td class="px-3 py-2 mono">escrow</td><td class="px-3 py-2">'+e.code+'</td><td class="px-3 py-2 text-right">+'+fmt(e.amount*1000)+' (escrow)</td></tr>';
+  else bal='<tr><td colspan="3" class="px-3 py-4 text-xs text-slate-400">'+(locale==='en'?'No balance change on this instruction.':'Tidak ada perubahan saldo pada instruksi ini.')+'</td></tr>';
+  var raw=JSON.stringify({signature:e.sig,slot:e.slot,blockTime:Math.floor(e.time.getTime()/1000),status:e.status,signer:e.signer,programId:state.program,instruction:e.type.toLowerCase(),batch:e.code,amount_tCO2e:e.amount,units:e.amount*1000,decimals:3,mint:e.mint,tokenAccount:e.ata,feeLamports:e.fee,computeUnits:e.cu,memo:e.memo,simulated:true},null,2);
+  openModal(Dialog('<h3 class="text-lg font-bold mb-3">'+(locale==='en'?'Transaction detail':'Detail transaksi')+'</h3>'+
+   '<div class="rounded-xl bg-indigo-50 text-indigo-800 text-sm p-3 mb-4">'+esc(summary(e))+'</div>'+
+   '<div class="flex gap-1 border-b border-slate-200 mb-4 text-sm font-semibold">'+
+     '<button class="px-3 py-2 border-b-2 border-brand-500 text-brand-700" data-action="tx-tab" data-t="ov" aria-selected="true">'+(locale==='en'?'Overview':'Ringkasan')+'</button>'+
+     '<button class="px-3 py-2 border-b-2 border-transparent text-slate-400" data-action="tx-tab" data-t="bal" aria-selected="false">'+(locale==='en'?'Balance changes':'Perubahan saldo')+'</button>'+
+     '<button class="px-3 py-2 border-b-2 border-transparent text-slate-400" data-action="tx-tab" data-t="raw" aria-selected="false">'+(locale==='en'?'Raw':'Data mentah')+'</button></div>'+
+   '<div data-p="ov"><dl class="grid grid-cols-[140px_1fr] gap-y-2 text-sm">'+
+     '<dt class="text-slate-400">Signature</dt><dd class="mono break-all">'+e.sig+' <button class="text-brand-700 font-semibold" data-action="copy" data-copy="'+e.sig+'">'+t('btn_copy')+'</button></dd>'+
+     '<dt class="text-slate-400">Slot</dt><dd class="mono">'+fmt(e.slot)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Time':'Waktu')+'</dt><dd>'+fdate(e.time)+'</dd>'+
+     '<dt class="text-slate-400">'+(locale==='en'?'Result':'Hasil')+'</dt><dd><span class="'+Badge('ok')+'">Success · Finalized</span></dd>'+
+     '<dt class="text-slate-400">Signer</dt><dd class="mono break-all">'+e.signer+'</dd><dt class="text-slate-400">Program</dt><dd class="mono break-all">'+state.program+'</dd>'+
+     '<dt class="text-slate-400">Fee</dt><dd>'+fmt(e.fee)+' lamports</dd><dt class="text-slate-400">Compute units</dt><dd>'+fmt(e.cu)+'</dd>'+
+     (e.mint?'<dt class="text-slate-400">Mint</dt><dd class="mono break-all">'+e.mint+'</dd>':'')+(e.intentSig?'<dt class="text-slate-400">Phantom sig</dt><dd class="mono">'+short(e.intentSig,14,8)+' <span class="'+Badge('ok')+'">'+(locale==='en'?'real':'nyata')+'</span></dd>':'')+(e.memo?'<dt class="text-slate-400">Memo</dt><dd>'+esc(e.memo)+'</dd>':'')+'</dl></div>'+
+   '<div data-p="bal" hidden><div class="overflow-x-auto rounded-xl border border-slate-100"><table class="w-full text-sm"><thead><tr class="bg-slate-50"><th class="text-left px-3 py-2 text-xs font-bold text-slate-500">'+(locale==='en'?'Account':'Akun')+'</th><th class="text-left px-3 py-2 text-xs font-bold text-slate-500">Token</th><th class="text-right px-3 py-2 text-xs font-bold text-slate-500">'+(locale==='en'?'Change':'Perubahan')+'</th></tr></thead><tbody>'+bal+'</tbody></table></div></div>'+
+   '<div data-p="raw" hidden><pre class="bg-slate-950 text-slate-200 rounded-xl p-4 text-xs overflow-auto mono max-h-80">'+esc(raw)+'</pre></div>'+
+   '<p class="text-xs text-slate-400 mt-4">'+(locale==='en'?'Simulation mode: this transaction is not on the real Solana network.':'Mode simulasi: transaksi ini belum ada di jaringan Solana sungguhan.')+'</p>'+
+   '<div class="flex justify-end mt-4"><button class="'+Btn('outline')+'" data-action="modal-close">'+t('btn_close')+'</button></div>',true));
+}
+function openBuy(id){
+  var l=state.listings.filter(function(x){return x.id===id;})[0]; if(!l) return; var q0=Math.min(l.available,500);
+  openModal(Dialog('<h3 class="text-lg font-bold mb-4">'+(locale==='en'?'Buy carbon credits':'Beli kredit karbon')+'</h3>'+
+   '<dl class="grid grid-cols-[90px_1fr] gap-y-2 text-sm mb-4"><dt class="text-slate-400">Batch</dt><dd class="mono">'+l.code+'</dd><dt class="text-slate-400">'+(locale==='en'?'Project':'Proyek')+'</dt><dd>'+(locale==='en'&&l.project_en?l.project_en:l.project)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Price':'Harga')+'</dt><dd><b>'+usd(l.price)+' USDC</b>/t</dd><dt class="text-slate-400">'+(locale==='en'?'Available':'Tersedia')+'</dt><dd>'+fmt(l.available)+' tCO2e</dd></dl>'+
+   '<label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Amount (tCO2e)':'Jumlah (tCO2e)')+'</label><input id="buyQty" class="'+FIELD_IN+' mb-3" type="text" inputmode="decimal" value="'+q0+'" data-price="'+l.price+'" data-max="'+l.available+'">'+
+   '<div class="rounded-xl bg-indigo-50 text-indigo-800 text-sm p-3" id="buySum"></div>'+
+   '<div class="flex justify-end gap-2 mt-5"><button class="'+Btn('outline')+'" data-action="modal-close">'+t('btn_cancel')+'</button><button class="'+Btn('primary')+'" id="buyGo" data-action="buy-confirm" data-id="'+l.id+'">'+t('btn_confirm_buy')+'</button></div>'));
+  updateBuy();
+}
+function updateBuy(){
+  var i=$('#buyQty'); if(!i) return;
+  var q=parseFloat(String(i.value).replace(',','.'))||0,p=parseFloat(i.dataset.price),max=parseFloat(i.dataset.max),sub=q*p,fee=sub*0.005,tot=sub+fee,after=state.usdc-tot,bad=!(q>0)||q>max||after<0;
+  $('#buySum').innerHTML=(locale==='en'?'Subtotal ':'Subtotal ')+usd(sub)+' + '+(locale==='en'?'0.5% fee':'biaya 0,5%')+' '+usd(fee)+' = <b>'+usd(tot)+' USDC</b><br>'+(locale==='en'?'USDC after purchase: ':'Saldo setelah beli: ')+(after<0?'<b class="text-rose-600">'+usd(after)+'</b>':usd(after));
+  $('#buyGo').disabled=bad;
+}
+function openList(code){
+  var h=findHolding(code); if(!h) return;
+  openModal(Dialog('<h3 class="text-lg font-bold mb-2">'+(locale==='en'?'Sell on marketplace':'Jual di marketplace')+'</h3><p class="text-sm text-slate-500 mb-4">'+(locale==='en'?'Available: ':'Saldo tersedia: ')+'<b>'+fmtA(h.balance)+' tCO2e</b> ('+h.code+')</p>'+
+   '<label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Amount (tCO2e)':'Jumlah (tCO2e)')+'</label><input id="lsQty" class="'+FIELD_IN+' mb-3" type="text" inputmode="decimal" value="'+Math.min(h.balance,500)+'">'+
+   '<label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Price (USDC/tCO2e)':'Harga (USDC/tCO2e)')+'</label><input id="lsPrice" class="'+FIELD_IN+'" type="text" inputmode="decimal" value="12.00">'+
+   '<div class="flex justify-end gap-2 mt-5"><button class="'+Btn('outline')+'" data-action="modal-close">'+t('btn_cancel')+'</button><button class="'+Btn('primary')+'" data-action="list-confirm" data-code="'+h.code+'">'+t('btn_create_listing')+'</button></div>'));
+}
+function openRetire(code){
+  var h=findHolding(code); if(!h) return;
+  openModal(Dialog('<h3 class="text-lg font-bold mb-2">'+(locale==='en'?'Retire tokens (burn for offset claim)':'Retire token (bakar untuk klaim offset)')+'</h3><p class="text-sm text-slate-500 mb-4">'+h.code+' · '+(locale==='en'?'balance ':'saldo ')+'<b>'+fmtA(h.balance)+' tCO2e</b></p>'+
+   '<label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Amount (tCO2e)':'Jumlah (tCO2e)')+'</label><input id="rtQty" class="'+FIELD_IN+' mb-3" type="text" inputmode="decimal" data-max="'+h.balance+'" value="'+Math.min(h.balance,500)+'">'+
+   '<label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Beneficiary':'Penerima manfaat')+'</label><input id="rtBen" class="'+FIELD_IN+' mb-3" type="text" value="'+esc(state.org)+'">'+
+   '<label class="text-xs font-semibold text-slate-500 block mb-1">'+(locale==='en'?'Claim reason':'Alasan klaim')+'</label><input id="rtWhy" class="'+FIELD_IN+' mb-3" type="text" value="'+(locale==='en'?'Offset Scope 1 emissions, FY2026':'Offset emisi Scope 1, periode 2026')+'">'+
+   '<div class="rounded-xl bg-amber-50 text-amber-800 text-sm p-3" id="rtPrev"></div>'+
+   '<label class="flex gap-2 items-start text-xs mt-3"><input type="checkbox" id="rtOk" class="mt-0.5"> '+(locale==='en'?'I understand retirement is permanent and cannot be undone.':'Saya memahami retirement bersifat permanen dan tidak dapat dibatalkan.')+'</label>'+
+   '<div class="flex justify-end gap-2 mt-5"><button class="'+Btn('outline')+'" data-action="modal-close">'+t('btn_cancel')+'</button><button class="'+Btn('danger')+'" id="rtGo" data-action="retire-confirm" data-code="'+h.code+'" disabled>'+t('btn_sign_retire')+'</button></div>'));
+  updateRetire();
+}
+function updateRetire(){var i=$('#rtQty'); if(!i) return; var q=parseFloat(String(i.value).replace(/\./g,'').replace(',','.'))||0,max=parseFloat(i.dataset.max); $('#rtPrev').textContent=(locale==='en'?'Will burn ':'Akan membakar ')+fmtA(q)+' tCO2e ('+fmt(q*1000)+' unit) '+(locale==='en'?'from a balance of ':'dari saldo ')+fmtA(max)+' tCO2e.'; $('#rtGo').disabled=!($('#rtOk').checked&&q>0&&q<=max);}
+function openCert(id){
+  var c=state.certs.filter(function(x){return x.id===id;})[0]; if(!c) return;
+  openModal(Dialog('<div class="rounded-2xl overflow-hidden border border-slate-200"><div class="bg-slate-900 text-white p-5 flex justify-between items-center"><div><div class="font-bold">'+(locale==='en'?'Retirement Certificate':'Sertifikat Retirement')+'</div><div class="mono text-xs text-slate-300">CL-RET-2026-'+c.id+'</div></div><span class="'+Badge('ok')+'">Final</span></div>'+
+   '<div class="p-5"><dl class="grid grid-cols-[130px_1fr] gap-y-2 text-sm"><dt class="text-slate-400">'+(locale==='en'?'Beneficiary':'Penerima manfaat')+'</dt><dd>'+esc(c.beneficiary)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Volume':'Volume')+'</dt><dd><b>'+fmtA(c.amount)+' tCO2e</b></dd><dt class="text-slate-400">'+(locale==='en'?'Reason':'Alasan klaim')+'</dt><dd>'+esc(c.reason)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Project':'Proyek')+'</dt><dd>'+c.project+', '+stdName(c.standard)+', '+c.vintage+'</dd><dt class="text-slate-400">Batch</dt><dd class="mono">'+c.code+'</dd><dt class="text-slate-400">Signature</dt><dd class="mono break-all">'+c.sig+'</dd><dt class="text-slate-400">Slot</dt><dd class="mono">'+fmt(c.slot)+'</dd><dt class="text-slate-400">'+(locale==='en'?'Time':'Waktu')+'</dt><dd>'+fdate(c.time)+'</dd></dl></div>'+
+   '<div class="bg-brand-50 text-brand-800 text-xs p-4">✓ '+(locale==='en'?'Token burned permanently and cannot be reused · simulation, not on a real network':'Token dibakar permanen dan tidak dapat dipakai ulang · simulasi, belum di jaringan sungguhan')+'</div></div>'+
+   '<div class="flex justify-end gap-2 mt-4"><button class="'+Btn('outline')+'" data-action="cert-pdf" data-id="'+c.id+'">'+t('btn_export_pdf')+'</button><button class="'+Btn('primary')+'" data-action="modal-close">'+t('btn_close')+'</button></div>',true));
+}
+
+/* ================= export ================= */
+function csvCell(v){v=String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v;}
+function exportCsv(){var head=['time','type','batch','tco2e','usdc','signature','slot','signer','fee_lamports','status'],lines=[head.join(',')]; state.ledger.slice().reverse().forEach(function(e){lines.push([e.time.toISOString(),e.type,e.code,e.amount,e.usdc||'',e.sig,e.slot,e.signer,e.fee,e.status].map(csvCell).join(','));}); download('climaledger-audit-log.csv',new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'})); toast((locale==='en'?'CSV downloaded (':'CSV diunduh (')+state.ledger.length+(locale==='en'?' rows)':' baris)'));}
+function exportActCsv(){var lines=['period,category,scope,activity,unit,factor_tco2e_per_unit,tco2e']; state.entries.forEach(function(e){var c=CATS[e.cat]; lines.push([MONTHS()[e.m]+' 2026',catName(e.cat),c.scope,e.qty,catUnit(e.cat),c.f,entryT(e).toFixed(3)].map(csvCell).join(','));}); download('climaledger-activity-data.csv',new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'})); toast((locale==='en'?'Activity CSV downloaded':'CSV aktivitas diunduh'));}
+function pdfEsc(s){return String(s).replace(/[–—]/g,'-').replace(/…/g,'...').replace(/[^\x20-\x7E]/g,'?').replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');}
+function makePdf(lines){
+  var pages=[[]],y=792; lines.forEach(function(L){var lh=L.s+5; if(y-lh<50){pages.push([]);y=792;} y-=lh; pages[pages.length-1].push({t:L.t,s:L.s,b:L.b,y:y});});
+  var objs=[],n=pages.length,kids=[]; for(var i=0;i<n;i++) kids.push((5+2*i)+' 0 R');
+  objs[0]='<< /Type /Catalog /Pages 2 0 R >>'; objs[1]='<< /Type /Pages /Kids ['+kids.join(' ')+'] /Count '+n+' >>'; objs[2]='<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>'; objs[3]='<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold >>';
+  pages.forEach(function(pg,i){var stream=pg.map(function(l){return 'BT /F'+(l.b?2:1)+' '+l.s+' Tf 40 '+l.y+' Td ('+pdfEsc(l.t)+') Tj ET';}).join('\n'); objs[4+2*i]='<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents '+(6+2*i)+' 0 R >>'; objs[5+2*i]='<< /Length '+stream.length+' >>\nstream\n'+stream+'\nendstream';});
+  var out='%PDF-1.4\n',offs=[]; objs.forEach(function(o,i){offs.push(out.length); out+=(i+1)+' 0 obj\n'+o+'\nendobj\n';});
+  var xref=out.length; out+='xref\n0 '+(objs.length+1)+'\n0000000000 65535 f \n'; offs.forEach(function(o){out+=String(o).padStart(10,'0')+' 00000 n \n';});
+  out+='trailer\n<< /Size '+(objs.length+1)+' /Root 1 0 R >>\nstartxref\n'+xref+'\n%%EOF'; return new Blob([out],{type:'application/pdf'});
+}
+function pad(s,n,right){s=String(s); if(s.length>n) s=s.slice(0,n); return right?s.padStart(n):s.padEnd(n);}
+function exportPdf(){
+  var d=emTotals(),tt2=d.t,L=[];
+  L.push({t:'ClimaLedger - Audit & ESG Report',s:15,b:true}); L.push({t:state.org+' | FY2026 | '+fdate(new Date()),s:9}); L.push({t:'Network: Solana '+state.cluster+' (simulated data)',s:9}); L.push({t:'',s:6});
+  L.push({t:'EMISSIONS SUMMARY (tCO2e, GHG Protocol)',s:11,b:true}); L.push({t:'Scope 1 : '+fmtT(tt2[1]),s:9}); L.push({t:'Scope 2 : '+fmtT(tt2[2]),s:9}); L.push({t:'Scope 3 : '+fmtT(tt2[3]),s:9}); L.push({t:'Total   : '+fmtT(tt2.all),s:9,b:true}); L.push({t:'',s:6});
+  L.push({t:'OFFSET & TOKENS',s:11,b:true}); L.push({t:'Retired         : '+fmtA(retiredTotal())+' tCO2e ('+nf1.format(tt2.all?retiredTotal()/tt2.all*100:0)+'% of emissions)',s:9}); L.push({t:'Token balance   : '+fmtA(tokenTotal())+' tCO2e',s:9}); L.push({t:'ISO 14064       : '+(isoOk()?'Passed ('+state.iso.date+')':'Not passed'),s:9}); L.push({t:'KYB             : '+(kybOk()?'Passed':'In review'),s:9}); L.push({t:'',s:6});
+  L.push({t:'TRANSACTION TRAIL ('+state.ledger.length+' events)',s:11,b:true});
+  L.push({t:pad('Time',17)+pad('Type',12)+pad('Batch',13)+pad('tCO2e',9,true)+'  '+pad('Signature',20)+' '+pad('Slot',11),s:8,b:true});
+  state.ledger.forEach(function(e){L.push({t:pad(fdate(e.time),17)+pad(e.type,12)+pad(e.code,13)+pad(fmtA(e.amount),9,true)+'  '+pad(short(e.sig,8,6),20)+' '+pad(e.slot,11),s:8});});
+  L.push({t:'',s:6}); L.push({t:'Note: this is a simulated prototype. Transactions are not on the real Solana network.',s:8});
+  download('climaledger-esg-report.pdf',makePdf(L)); toast(locale==='en'?'PDF report downloaded':'PDF laporan diunduh');
+}
+function exportCertPdf(id){
+  var c=state.certs.filter(function(x){return x.id===id;})[0]; if(!c) return;
+  var L=[{t:'Carbon Credit Retirement Certificate',s:15,b:true},{t:'CL-RET-2026-'+c.id,s:10},{t:'',s:8},{t:'Beneficiary : '+c.beneficiary,s:10},{t:'Volume      : '+fmtA(c.amount)+' tCO2e',s:10,b:true},{t:'Reason      : '+c.reason,s:10},{t:'Project     : '+c.project+' ('+stdName(c.standard)+', '+c.vintage+')',s:10},{t:'Batch       : '+c.code,s:10},{t:'Signature   : '+c.sig.slice(0,44),s:9},{t:'              '+c.sig.slice(44),s:9},{t:'Slot        : '+fmt(c.slot),s:10},{t:'Time        : '+fdate(c.time),s:10},{t:'',s:8},{t:'Token burned permanently. Document from a simulated prototype.',s:9}];
+  download('retirement-certificate-'+c.id+'.pdf',makePdf(L)); toast(locale==='en'?'Certificate PDF downloaded':'Sertifikat PDF diunduh');
+}
+
+/* ================= events ================= */
+document.addEventListener('click',async function(e){
+  var bg=e.target.closest&&e.target.closest('[data-modal-bg]'); if(bg&&e.target===bg){closeModal(); return;}
+  var el=e.target.closest&&e.target.closest('[data-action]'); if(!el) return;
+  var a=el.dataset.action;
+  if(a==='nav-go') go(el.dataset.to);
+  else if(a==='set-locale'){locale=el.dataset.v; render();}
+  else if(a==='set-preview'){state.previewState=el.dataset.v; render();}
+  else if(a==='state-retry'){state.previewState='normal'; render();}
+  else if(a==='modal-close') closeModal();
+  else if(a==='copy') copyText(el.dataset.copy);
+  else if(a==='connect-open') openConnect();
+  else if(a==='connect-phantom') connectPhantom();
+  else if(a==='connect-demo') connectDemo();
+  else if(a==='disconnect') disconnect();
+  else if(a==='dash-cta'){state.f.dashCta=!state.f.dashCta; render();}
+  else if(a==='dash-sort'){var col=el.dataset.col,s=state.f.dashSort; s.dir=(s.col===col&&s.dir==='desc')?'asc':'desc'; s.col=col; render();}
+  else if(a==='add-entry'){
+    var k=$('#addCat').value,m=parseInt($('#addMonth').value,10),q=parseFloat(String($('#addQty').value).replace(',','.'));
+    if(!(q>0)){toast(locale==='en'?'Enter a valid amount':'Isi jumlah aktivitas yang valid'); return;}
+    state.entries.push({id:++state.entrySeq,m:m,cat:k,qty:q});
+    if(isoOk()){state.iso.status='pending'; toast(locale==='en'?'Data added. ISO 14064 status reset to not verified.':'Data ditambahkan. Status ISO 14064 kembali ke belum lulus.');} else toast(locale==='en'?'Activity data added':'Data aktivitas ditambahkan');
+    render();
+  }
+  else if(a==='del-entry'){var id=parseInt(el.dataset.id,10); state.entries=state.entries.filter(function(x){return x.id!==id;}); if(isoOk()){state.iso.status='pending';} render();}
+  else if(a==='export-act-csv') exportActCsv();
+  else if(a==='iso-toggle'){state.iso.status=isoOk()?'pending':'verified'; if(isoOk()) state.iso.date='28 Sep 2026'; toast(isoOk()?(locale==='en'?'Report passed ISO 14064 (simulated VVB)':'Laporan lulus verifikasi ISO 14064 (simulasi VVB)'):(locale==='en'?'Reopened for verification':'Verifikasi dibuka kembali')); render();}
+  else if(a==='goto-tok'){var row=state.registry.filter(function(r){return r.id===el.dataset.id;})[0]; state.tok={rowId:row.id,amount:Math.min(row.remaining,surplus()),phase:'idle',stepIdx:-1,progress:0,result:null,locked:0}; go('tokenize');}
+  else if(a==='tok-start') startLock();
+  else if(a==='tok-cancel') cancelLock();
+  else if(a==='tok-mint') doMint();
+  else if(a==='tok-again'){state.tok={rowId:null,amount:0,phase:'idle',stepIdx:-1,progress:0,result:null,locked:0}; render();}
+  else if(a==='m-std'){state.f.mStd=el.dataset.v; render();}
+  else if(a==='a-type'){state.f.aType=el.dataset.v; render();}
+  else if(a==='buy-open') openBuy(el.dataset.id);
+  else if(a==='buy-confirm'){
+    var l=state.listings.filter(function(x){return x.id===el.dataset.id;})[0]; if(!l) return;
+    var q=parseFloat(String($('#buyQty').value).replace(',','.')),tot=q*l.price*1.005; if(!(q>0)||q>l.available||tot>state.usdc) return;
+    var isig=await guard('ClimaLedger buy '+l.code+' '+q+' tCO2e'); if(!isig) return;
+    l.available-=q; state.usdc-=tot; var h=ensureHolding(l.code,l); h.balance+=q;
+    mkEvent('Pembelian',l.code,q,new Date(),{usdc:tot,price:l.price,intentSig:state.wallet.mode==='phantom'?isig:null});
+    if(l.available<=0) state.listings=state.listings.filter(function(x){return x.id!==l.id;});
+    closeModal(); toast((locale==='en'?'Purchase of ':'Pembelian ')+fmtA(q)+' tCO2e '+(locale==='en'?'successful, ':'berhasil, ')+usd(tot)+' USDC'); render();
+  }
+  else if(a==='cancel-listing'){
+    var l2=state.listings.filter(function(x){return x.id===el.dataset.id;})[0]; if(!l2) return;
+    var h2=findHolding(l2.code); if(h2){h2.balance+=l2.available; h2.listed-=l2.available;}
+    mkEvent('Pembatalan',l2.code,l2.available,new Date()); state.listings=state.listings.filter(function(x){return x.id!==l2.id;}); toast(locale==='en'?'Listing cancelled, balance returned':'Listing dibatalkan, saldo kembali'); render();
+  }
+  else if(a==='list-open') openList(el.dataset.code);
+  else if(a==='list-confirm'){
+    var h3=findHolding(el.dataset.code),q3=parseFloat(String($('#lsQty').value).replace(',','.')),p3=parseFloat(String($('#lsPrice').value).replace(',','.'));
+    if(!h3||!(q3>0)||q3>h3.balance){toast(locale==='en'?'Invalid amount':'Jumlah tidak valid'); return;}
+    if(!(p3>0)){toast(locale==='en'?'Invalid price':'Harga tidak valid'); return;}
+    var isig3=await guard('ClimaLedger list '+h3.code+' '+q3+' tCO2e'); if(!isig3) return;
+    h3.balance-=q3; h3.listed+=q3;
+    state.listings.push({id:'own'+(++state.listSeq),code:h3.code,project:h3.project,project_en:h3.project_en,standard:h3.standard,vintage:h3.vintage,available:q3,price:p3,seller:state.wallet.address,mine:true});
+    mkEvent('Listing',h3.code,q3,new Date(),{price:p3}); closeModal(); toast(locale==='en'?'Listing created':'Listing dibuat'); go('market');
+  }
+  else if(a==='retire-open') openRetire(el.dataset.code);
+  else if(a==='retire-confirm'){
+    var h4=findHolding(el.dataset.code),q4=parseFloat(String($('#rtQty').value).replace(',','.')); if(!h4||!(q4>0)||q4>h4.balance) return;
+    var ben=$('#rtBen').value||'-',why=$('#rtWhy').value||'-';
+    var isig4=await guard('ClimaLedger retire '+h4.code+' '+q4+' tCO2e'); if(!isig4) return;
+    h4.balance-=q4; h4.retired+=q4;
+    var ev=mkEvent('Retirement',h4.code,q4,new Date(),{memo:why,intentSig:state.wallet.mode==='phantom'?isig4:null});
+    var cert={id:++state.certSeq,code:h4.code,project:h4.project,standard:h4.standard,vintage:h4.vintage,amount:q4,beneficiary:ben,reason:why,sig:ev.sig,slot:ev.slot,time:ev.time};
+    state.certs.unshift(cert); render(); toast(locale==='en'?'Retirement successful. Certificate issued.':'Retire berhasil. Sertifikat diterbitkan.'); openCert(cert.id);
+  }
+  else if(a==='cert-open') openCert(parseInt(el.dataset.id,10));
+  else if(a==='cert-pdf') exportCertPdf(parseInt(el.dataset.id,10));
+  else if(a==='tx-open') openTx(parseInt(el.dataset.id,10));
+  else if(a==='tx-tab'){
+    var tb=el.dataset.t; $$('[data-action="tx-tab"]').forEach(function(b){var on=b===el; b.setAttribute('aria-selected',on); b.className=on?'px-3 py-2 border-b-2 border-brand-500 text-brand-700':'px-3 py-2 border-b-2 border-transparent text-slate-400';});
+    $$('[data-p]').forEach(function(p){p.hidden=p.dataset.p!==tb;});
+  }
+  else if(a==='export-csv') exportCsv();
+  else if(a==='export-pdf') exportPdf();
+  else if(a==='kyb-upload'){state.kybTarget=el.dataset.id; $('#kybFile').value=''; $('#kybFile').click();}
+  else if(a==='kyb-approve'){var s=state.kyb.filter(function(x){return x.id===el.dataset.id;})[0]; s.status='verified'; s.detail_id='Disetujui (simulasi)'; s.detail_en='Approved (simulated)'; toast(locale==='en'?'KYB step approved (simulated)':'Langkah KYB disetujui (simulasi)'); render();}
+});
+$('#kybFile').addEventListener('change',function(){var f=this.files&&this.files[0]; if(!f) return; var s=state.kyb.filter(function(x){return x.id===state.kybTarget;})[0]; if(!s) return; s.status='pending'; s.file=f.name; s.detail_id='Menunggu tinjauan compliance'; s.detail_en='Awaiting compliance review'; toast(locale==='en'?'File uploaded. KYB held pending review.':'Berkas diunggah. KYB ditahan sampai disetujui.'); render();});
+document.addEventListener('input',function(e){
+  var id=e.target.id;
+  if(id==='addQty') updateAddPrev();
+  else if(id==='mQ'){state.f.mQ=e.target.value; fillMarketRows();}
+  else if(id==='aQ'){state.f.aQ=e.target.value; fillAuditRows();}
+  else if(id==='offRange'||id==='offNum'){var v=parseFloat(String(e.target.value).replace(/\./g,'').replace(',','.')); if(v>=0){state.offsetPlan=v; if(id==='offRange') $('#offNum').value=v; else $('#offRange').value=v; updateCalc();}}
+  else if(id==='tokAmt'){var av=parseFloat(String(e.target.value).replace(',','.'))||0; state.tok.amount=av; var u=$('#tokUnits'); if(u) u.textContent=fmt(av*1000);}
+  else if(id==='buyQty') updateBuy();
+  else if(id==='rtQty') updateRetire();
+});
+document.addEventListener('change',function(e){
+  var id=e.target.id;
+  if(id==='fMonth'){state.f.tMonth=e.target.value; fillActRows();}
+  else if(id==='fScope'){state.f.tScope=e.target.value; fillActRows();}
+  else if(id==='addCat') updateAddPrev();
+  else if(id==='mSort'){state.f.mSort=e.target.value; fillMarketRows();}
+  else if(id==='netSel'){state.cluster=e.target.value; toast('Solana: '+state.cluster); render();}
+  else if(id==='tokRow'){var row=state.registry.filter(function(r){return r.id===e.target.value;})[0]; state.tok.rowId=row.id; state.tok.amount=Math.min(row.remaining,surplus()); render();}
+  else if(id==='rtOk') updateRetire();
+});
+document.addEventListener('keydown',function(e){if(e.key==='Escape') closeModal();});
+
+/* initial loading skeleton, then render */
+state.previewState='loading'; renderNav(); $('#view').innerHTML=DashboardSkeleton();
+setTimeout(function(){ state.previewState='normal'; render(); },550);
+})();
+</script>
+</body>
+</html>
