@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { useI18n } from '../../lib/i18n';
 import { api } from '../../lib/api';
 import { useToast } from '../../components/Toast';
 import { RegistryBatch } from '../../types';
 
-export default function TokenizeWizardPage() {
+function TokenizeWizardContent() {
   const { t } = useI18n();
   const { showToast } = useToast();
   const searchParams = useSearchParams();
@@ -315,6 +315,14 @@ export default function TokenizeWizardPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TokenizeWizardPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-500">Memuat wizard tokenisasi...</div>}>
+      <TokenizeWizardContent />
+    </Suspense>
   );
 }
 

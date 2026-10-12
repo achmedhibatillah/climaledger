@@ -37,7 +37,8 @@ export class SolanaService {
 
   async getLatestSlot(): Promise<number> {
     try {
-      return await this.connection.getSlot();
+      const slot = await this.connection.getSlot();
+      return Number(slot);
     } catch {
       return 284192000 + Math.floor(Math.random() * 1000);
     }
@@ -51,8 +52,8 @@ export class SolanaService {
     this.logger.log(`Processing tokenize for batch ${batchId}, amount: ${amount}`);
     
     // Generate deterministic or simulated keys
-    const mintKeypair = Keypair.generate();
-    const recipientKeypair = Keypair.generate();
+    const mintKeypair = await Keypair.generate();
+    const recipientKeypair = await Keypair.generate();
     const fakeSignature = walletSignature || '5' + Array.from({ length: 87 }, () => Math.floor(Math.random() * 36).toString(36)).join('');
     const slot = await this.getLatestSlot();
 
