@@ -7,7 +7,7 @@ import { useToast } from '../../components/Toast';
 import { LedgerEvent } from '../../types';
 
 export default function AuditExplorerPage() {
-  const { t } = useI18n();
+  const { t, formatNumber, formatDate } = useI18n();
   const { showToast } = useToast();
 
   const [ledger, setLedger] = useState<LedgerEvent[]>([]);
@@ -54,10 +54,10 @@ export default function AuditExplorerPage() {
 
   const copyText = (txt: string) => {
     navigator.clipboard.writeText(txt);
-    showToast('Disalin ke clipboard!');
+    showToast(t('btn_copied'));
   };
 
-  const fmt = (n: number) => new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n);
+  const fmt = (n: number) => formatNumber(n, { maximumFractionDigits: 0 });
   const latestSlot = ledger.length > 0 ? Math.max(...ledger.map((e) => e.slot)) : 284192000;
 
   return (
@@ -65,29 +65,29 @@ export default function AuditExplorerPage() {
       {/* 4 KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Total Transaksi On-Chain</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kpi_total_tx')}</div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">{ledger.length} TX</div>
-          <div className="text-xs text-slate-400 mt-2">Seluruh blok termuat</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kpi_total_tx_sub')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Finality Konsensus</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kpi_finality')}</div>
           <div className="text-2xl font-black text-emerald-600 tracking-tight">100% Finalized</div>
-          <div className="text-xs text-slate-400 mt-2">Solana confirmed state</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kpi_finality_sub')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Slot Solana Terakhir</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kpi_latest_slot')}</div>
           <div className="text-2xl font-black text-slate-900 mono tracking-tight">{latestSlot}</div>
-          <div className="text-xs text-slate-400 mt-2">Sinkronisasi ledger lokal</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kpi_latest_slot_sub')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Status Rekonsiliasi 3-Arah</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kpi_reconciliation_status')}</div>
           <div className="text-2xl font-black text-emerald-600 tracking-tight flex items-center gap-1.5">
             ✓ MATCH
           </div>
-          <div className="text-xs text-slate-400 mt-2">Registry ↔ On-Chain ↔ DB</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kpi_reconciliation_sub')}</div>
         </div>
       </div>
 
@@ -95,10 +95,8 @@ export default function AuditExplorerPage() {
       <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-soft">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div>
-            <h3 className="font-bold text-slate-900">Rekonsiliasi Integritas 3-Arah (Zero Double-Counting)</h3>
-            <p className="text-xs text-slate-400">
-              Memastikan total token yang dicetak sama persis dengan total alokasi yang beredar
-            </p>
+            <h3 className="font-bold text-slate-900">{t('reconciliation_heading')}</h3>
+            <p className="text-xs text-slate-400 mt-0.5">{t('reconciliation_desc')}</p>
           </div>
           <div className="flex items-center gap-2">
             <a
@@ -106,14 +104,14 @@ export default function AuditExplorerPage() {
               download="audit-ledger.csv"
               className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-700 hover:bg-slate-50"
             >
-              Ekspor CSV
+              {t('btn_export_csv')}
             </a>
             <a
               href="http://localhost:3001/api/v1/audit/export.pdf"
               download="audit-report.pdf"
               className="rounded-lg bg-emerald-600 text-white px-3 py-1.5 text-xs font-semibold hover:bg-emerald-700"
             >
-              Laporan PDF
+              {t('btn_pdf_report')}
             </a>
           </div>
         </div>
@@ -125,7 +123,7 @@ export default function AuditExplorerPage() {
                 <div className="font-bold text-slate-900 text-sm">{r.code}</div>
                 <div className="text-xs text-slate-500">{r.project}</div>
                 <div className="text-xs mono text-slate-400 mt-1">
-                  Minted: {fmt(r.minted)} t = Alokasi: {fmt(r.balanceListedRetired)} t
+                  {t('reconciliation_minted_label')}: {fmt(r.minted)} t = {t('reconciliation_allocation_label')}: {fmt(r.balanceListedRetired)} t
                 </div>
               </div>
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold px-3 py-1">
@@ -144,6 +142,7 @@ export default function AuditExplorerPage() {
             {['ALL', 'Mint', 'Pembelian', 'Listing', 'Retirement'].map((tName) => (
               <button
                 key={tName}
+                type="button"
                 onClick={() => setFilterType(tName)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition ${
                   filterType === tName
@@ -151,7 +150,7 @@ export default function AuditExplorerPage() {
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
-                {tName === 'ALL' ? 'Semua Tipe' : tName}
+                {tName === 'ALL' ? t('filter_all_types') : tName}
               </button>
             ))}
           </div>
@@ -159,7 +158,7 @@ export default function AuditExplorerPage() {
           <div className="w-full sm:w-72">
             <input
               type="text"
-              placeholder="Cari signature atau kode batch…"
+              placeholder={t('search_audit_placeholder')}
               value={searchQ}
               onChange={(e) => setSearchQ(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && loadData()}
@@ -173,12 +172,12 @@ export default function AuditExplorerPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Signature Transaksi</th>
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Tipe Instruksi</th>
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Batch & Jumlah</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Solana Slot</th>
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Waktu</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Aksi</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_signature')}</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_type')}</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_details')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_slot')}</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_timestamp')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_action')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -207,13 +206,16 @@ export default function AuditExplorerPage() {
                     <span className="mono font-bold text-emerald-700">{fmt(e.amount)} t</span>
                   </td>
                   <td className="px-4 py-3 text-right mono font-semibold text-slate-700">{e.slot}</td>
-                  <td className="px-4 py-3 text-xs text-slate-500">{e.time?.slice(0, 16).replace('T', ' ')}</td>
+                  <td className="px-4 py-3 text-xs text-slate-500">
+                    {e.time ? formatDate(e.time.slice(0, 10)) : '-'}
+                  </td>
                   <td className="px-4 py-3 text-right">
                     <button
+                      type="button"
                       onClick={() => openTxDetail(e.id)}
                       className="text-xs text-emerald-700 font-semibold hover:underline"
                     >
-                      Detail →
+                      {t('tab_overview')} →
                     </button>
                   </td>
                 </tr>
@@ -223,58 +225,61 @@ export default function AuditExplorerPage() {
         </div>
       </div>
 
-      {/* Transaction Detail Modal (Exact from HTML template) */}
+      {/* Transaction Detail Modal */}
       {selectedTx && (
         <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-soft space-y-4 max-h-[90vh] overflow-y-auto">
-            <h3 className="text-lg font-bold text-slate-900">Detail Transaksi On-Chain</h3>
+            <h3 className="text-lg font-bold text-slate-900">{t('modal_tx_title')}</h3>
             <div className="rounded-xl bg-indigo-50 text-indigo-800 text-xs p-3">
-              Instruksi <b>{selectedTx.type}</b> sebanyak <b>{fmt(selectedTx.amount)} tCO2e</b> pada batch {selectedTx.code}.
+              {t('modal_instruction')}: <b>{selectedTx.type}</b> · <b>{fmt(selectedTx.amount)} tCO2e</b> ({selectedTx.code})
             </div>
 
             {/* Tabs */}
             <div className="flex gap-2 border-b border-slate-200 text-sm font-semibold">
               <button
+                type="button"
                 onClick={() => setTxTab('ov')}
                 className={`px-3 py-2 border-b-2 transition ${
                   txTab === 'ov' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-400'
                 }`}
               >
-                Ringkasan
+                {t('tab_overview')}
               </button>
               <button
+                type="button"
                 onClick={() => setTxTab('bal')}
                 className={`px-3 py-2 border-b-2 transition ${
                   txTab === 'bal' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-400'
                 }`}
               >
-                Perubahan Saldo
+                {t('tab_balances')}
               </button>
               <button
+                type="button"
                 onClick={() => setTxTab('raw')}
                 className={`px-3 py-2 border-b-2 transition ${
                   txTab === 'raw' ? 'border-emerald-600 text-emerald-700' : 'border-transparent text-slate-400'
                 }`}
               >
-                Data Mentah (JSON)
+                {t('tab_raw_json')}
               </button>
             </div>
 
             {/* Tab 1: Overview */}
             {txTab === 'ov' && (
               <dl className="grid grid-cols-[120px_1fr] gap-y-2 text-xs">
-                <dt className="text-slate-400">Signature</dt>
+                <dt className="text-slate-400">{t('label_signature')}</dt>
                 <dd className="mono break-all text-slate-900 flex items-center gap-1">
                   <span>{selectedTx.sig}</span>
-                  <button onClick={() => copyText(selectedTx.sig)} className="text-emerald-700 font-bold shrink-0">
-                    Salin
+                  <button type="button" onClick={() => copyText(selectedTx.sig)} className="text-emerald-700 font-bold shrink-0">
+                    {t('btn_copy')}
                   </button>
                 </dd>
 
-                <dt className="text-slate-400">Solana Slot</dt>
+                <dt className="text-slate-400">{t('label_solana_slot')}</dt>
                 <dd className="mono font-bold text-slate-900">{selectedTx.slot}</dd>
 
-                <dt className="text-slate-400">Hasil Konsensus</dt>
+                <dt className="text-slate-400">{t('kpi_finality')}</dt>
                 <dd>
                   <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold px-2 py-0.5">
                     Success · Finalized
@@ -284,7 +289,7 @@ export default function AuditExplorerPage() {
                 <dt className="text-slate-400">Signer</dt>
                 <dd className="mono break-all text-slate-900">{selectedTx.signer}</dd>
 
-                <dt className="text-slate-400">Fee Transaksi</dt>
+                <dt className="text-slate-400">{t('modal_fee_paid')}</dt>
                 <dd className="mono">{selectedTx.fee} SOL</dd>
 
                 <dt className="text-slate-400">Compute Units</dt>
@@ -298,9 +303,9 @@ export default function AuditExplorerPage() {
                 <table className="w-full text-left">
                   <thead className="bg-slate-50">
                     <tr>
-                      <th className="p-2.5 font-bold text-slate-500">Akun</th>
+                      <th className="p-2.5 font-bold text-slate-500">Account</th>
                       <th className="p-2.5 font-bold text-slate-500">Token</th>
-                      <th className="p-2.5 text-right font-bold text-slate-500">Perubahan</th>
+                      <th className="p-2.5 text-right font-bold text-slate-500">Change</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -325,10 +330,11 @@ export default function AuditExplorerPage() {
 
             <div className="flex justify-end pt-3">
               <button
+                type="button"
                 onClick={() => setSelectedTx(null)}
                 className="bg-slate-100 text-slate-700 font-semibold text-xs px-4 py-2 rounded-xl hover:bg-slate-200"
               >
-                Tutup
+                {t('btn_close')}
               </button>
             </div>
           </div>
@@ -337,4 +343,3 @@ export default function AuditExplorerPage() {
     </div>
   );
 }
-

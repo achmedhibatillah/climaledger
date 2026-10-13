@@ -8,10 +8,15 @@ import { useToast } from '../../components/Toast';
 import { RegistryBatch } from '../../types';
 
 export default function CreditAssessmentPage() {
-  const { t } = useI18n();
+  const { t, formatNumber } = useI18n();
   const { showToast } = useToast();
   const [batches, setBatches] = useState<RegistryBatch[]>([]);
-  const [iso, setIso] = useState<any>({ verified: true, date: '2024-02-18', hash: '0x8f4d92a11b72e5c8041a99f1c7d23e5904ab76c8', verifier: 'TUV Rheinland Indonesia' });
+  const [iso, setIso] = useState<any>({
+    verified: true,
+    date: '2024-02-18',
+    hash: '0x8f4d92a11b72e5c8041a99f1c7d23e5904ab76c8',
+    verifier: 'TUV Rheinland Indonesia',
+  });
   const [offsetPlan, setOffsetPlan] = useState<number>(2500);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +34,7 @@ export default function CreditAssessmentPage() {
       setBatches(bList);
       setIso(isoData);
     } catch (err: any) {
-      showToast(err.message || 'Gagal memuat data penilaian kredit');
+      showToast(err.message || 'Gagal memuat data');
     } finally {
       setLoading(false);
     }
@@ -48,42 +53,42 @@ export default function CreditAssessmentPage() {
   const planPercent = eligibleTotal > 0 ? Math.min(100, Math.round((offsetPlan / eligibleTotal) * 100)) : 0;
   const surplusPercent = 100 - planPercent;
 
-  const fmt = (n: number) => new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(Math.round(n));
+  const fmt = (n: number) => formatNumber(Math.round(n), { maximumFractionDigits: 0 });
 
   return (
     <div className="space-y-6">
       {/* 4 KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Status ISO 14064</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('iso_verified_label')}</div>
           <div className="text-2xl font-black text-emerald-600 tracking-tight flex items-center gap-2">
-            ✓ Terverifikasi
+            {t('iso_fully_verified')}
           </div>
-          <div className="text-xs text-slate-400 mt-2">Audit pihak ketiga sah</div>
+          <div className="text-xs text-slate-400 mt-2">{t('iso_audit_valid')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Standar Diakui</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('standards_recognized')}</div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            2 Standar <span className="text-xs font-semibold text-slate-400">(VCS, GS)</span>
+            2 <span className="text-xs font-semibold text-slate-400">(VCS, GS)</span>
           </div>
-          <div className="text-xs text-slate-400 mt-2">Verra & Gold Standard</div>
+          <div className="text-xs text-slate-400 mt-2">{t('standards_recognized_sub')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Batch Registry Aktif</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('active_registry_batches')}</div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
-            {batches.filter((b) => b.status === 'active').length} / {batches.length} Batch
+            {batches.filter((b) => b.status === 'active').length} / {batches.length}
           </div>
-          <div className="text-xs text-slate-400 mt-2">Siap untuk tokenisasi</div>
+          <div className="text-xs text-slate-400 mt-2">{t('ready_to_tokenize')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Verifikasi KYB</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kyb_verification_title')}</div>
           <div className="text-2xl font-black text-emerald-600 tracking-tight">
-            Lolos (4/4)
+            {t('kyb_verification_score')}
           </div>
-          <div className="text-xs text-slate-400 mt-2">NIB, NPWP, Akta, Direksi</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kyb_verification_sub')}</div>
         </div>
       </div>
 
@@ -91,33 +96,31 @@ export default function CreditAssessmentPage() {
       <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-soft">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
           <div>
-            <h3 className="font-bold text-slate-900 text-lg">Kalkulator Alokasi Surplus Kredit</h3>
-            <p className="text-xs text-slate-400">
-              Tentukan porsi kredit karbon yang ditahan untuk target net-zero internal vs surplus yang dijual di pasar
-            </p>
+            <h3 className="font-bold text-slate-900 text-lg">{t('calculator_title')}</h3>
+            <p className="text-xs text-slate-400 mt-0.5">{t('calculator_sub')}</p>
           </div>
           <Link
             href="/tokenize"
-            className="inline-flex items-center gap-2 bg-emerald-600 text-white font-semibold text-xs px-4 py-2 rounded-xl hover:bg-emerald-700 transition"
+            className="inline-flex items-center gap-2 bg-emerald-600 text-white font-semibold text-xs px-4 py-2 rounded-xl hover:bg-emerald-700 transition shrink-0"
           >
-            Tokenisasi Surplus Sekarang →
+            {t('btn_tokenize_surplus')}
           </Link>
         </div>
 
-        {/* 3 Angka Besar */}
+        {/* 3 Large Stat Metrics */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-2xl bg-slate-50 border border-slate-100 mb-6 text-center">
           <div>
-            <div className="text-xs font-semibold text-slate-400 mb-1">Kredit Layak Tersedia</div>
+            <div className="text-xs font-semibold text-slate-400 mb-1">{t('calc_eligible_credits')}</div>
             <div className="text-3xl font-black text-slate-900">{fmt(eligibleTotal)}</div>
             <div className="text-[11px] text-slate-400">tCO2e (VCS & GS)</div>
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 mb-1">Rencana Offset Internal</div>
+            <div className="text-xs font-semibold text-slate-400 mb-1">{t('calc_internal_plan')}</div>
             <div className="text-3xl font-black text-indigo-600">{fmt(offsetPlan)}</div>
             <div className="text-[11px] text-slate-400">tCO2e ({planPercent}%)</div>
           </div>
           <div>
-            <div className="text-xs font-semibold text-slate-400 mb-1">Surplus Siap Dijual</div>
+            <div className="text-xs font-semibold text-slate-400 mb-1">{t('calc_surplus_market')}</div>
             <div className="text-3xl font-black text-emerald-600">{fmt(surplus)}</div>
             <div className="text-[11px] text-slate-400">tCO2e ({surplusPercent}%)</div>
           </div>
@@ -129,20 +132,20 @@ export default function CreditAssessmentPage() {
             <div
               style={{ width: `${planPercent}%` }}
               className="bg-indigo-500 transition-all"
-              title={`Internal: ${planPercent}%`}
+              title={`${t('legend_internal')}: ${planPercent}%`}
             />
             <div
               style={{ width: `${surplusPercent}%` }}
               className="bg-emerald-500 transition-all"
-              title={`Surplus: ${surplusPercent}%`}
+              title={`${t('legend_surplus')}: ${surplusPercent}%`}
             />
           </div>
           <div className="flex justify-between text-xs text-slate-500">
             <span className="flex items-center gap-1.5">
-              <i className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> Internal ({planPercent}%)
+              <i className="w-2.5 h-2.5 rounded-full bg-indigo-500 inline-block" /> {t('legend_internal')} ({planPercent}%)
             </span>
             <span className="flex items-center gap-1.5">
-              <i className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> Surplus Dijual ({surplusPercent}%)
+              <i className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" /> {t('legend_surplus')} ({surplusPercent}%)
             </span>
           </div>
         </div>
@@ -152,7 +155,7 @@ export default function CreditAssessmentPage() {
           <input
             type="range"
             min={0}
-            max={eligibleTotal}
+            max={eligibleTotal || 1000}
             step={50}
             value={offsetPlan}
             onChange={(e) => handlePlanChange(Number(e.target.value))}
@@ -173,30 +176,32 @@ export default function CreditAssessmentPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* ISO Status Card */}
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-soft space-y-4">
-          <h3 className="font-bold text-slate-900">Sertifikasi ISO 14064</h3>
+          <h3 className="font-bold text-slate-900">{t('iso_cert_heading')}</h3>
           <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-emerald-800 text-xs space-y-2">
-            <div className="font-bold text-sm">Status: Terverifikasi Penuh</div>
-            <div>Auditor: {iso.verifier}</div>
-            <div>Tanggal Audit: {iso.date}</div>
+            <div className="font-bold text-sm">{t('iso_cert_status_full')}</div>
+            <div>
+              {t('iso_auditor')}: {iso.verifier}
+            </div>
+            <div>
+              {t('iso_audit_date')}: {iso.date}
+            </div>
             <div className="mono break-all text-[11px] text-emerald-700">Hash: {iso.hash}</div>
           </div>
-          <p className="text-xs text-slate-400">
-            Dokumen verifikasi telah diikat dengan hash on-chain di smart contract ClimaLedger.
-          </p>
+          <p className="text-xs text-slate-400">{t('iso_onchain_note')}</p>
         </div>
 
         {/* Registry Batches Table */}
         <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-6 shadow-soft">
-          <h3 className="font-bold text-slate-900 mb-4">Batch Registry Terverifikasi</h3>
+          <h3 className="font-bold text-slate-900 mb-4">{t('verified_batches_heading')}</h3>
           <div className="overflow-x-auto rounded-xl border border-slate-100">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100">
-                  <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Proyek</th>
-                  <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Standar</th>
-                  <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Vintage</th>
-                  <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Tersisa</th>
-                  <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Aksi</th>
+                  <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_project')}</th>
+                  <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_standard')}</th>
+                  <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_vintage')}</th>
+                  <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_remaining')}</th>
+                  <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_action')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -219,10 +224,10 @@ export default function CreditAssessmentPage() {
                           href={`/tokenize?batch=${b.id}`}
                           className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600 hover:text-emerald-700 hover:underline"
                         >
-                          Tokenisasi →
+                          {t('action_tokenize')}
                         </Link>
                       ) : (
-                        <span className="text-xs text-slate-400">Belum eligible</span>
+                        <span className="text-xs text-slate-400">{t('not_eligible_yet')}</span>
                       )}
                     </td>
                   </tr>
@@ -235,4 +240,3 @@ export default function CreditAssessmentPage() {
     </div>
   );
 }
-

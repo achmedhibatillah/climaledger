@@ -7,7 +7,7 @@ import { useToast } from '../../components/Toast';
 import { Holding, RetirementCert } from '../../types';
 
 export default function PortfolioPage() {
-  const { t } = useI18n();
+  const { t, formatNumber, formatDate } = useI18n();
   const { showToast } = useToast();
 
   const [holdings, setHoldings] = useState<Holding[]>([]);
@@ -46,7 +46,7 @@ export default function PortfolioPage() {
 
     const amount = parseFloat(retireAmount);
     if (!amount || amount <= 0 || amount > retireTarget.balance) {
-      showToast('Jumlah tidak valid atau melebihi saldo token');
+      showToast(t('toast_retire_invalid'));
       return;
     }
 
@@ -57,15 +57,15 @@ export default function PortfolioPage() {
         beneficiary,
         reason,
       });
-      showToast(`Token berhasil di-retire (burn)! Sertifikat #${cert.id} diterbitkan.`);
+      showToast(t('toast_retire_success'));
       setRetireTarget(null);
       loadData();
     } catch (err: any) {
-      showToast(err.message || 'Gagal me-retire token');
+      showToast(err.message || t('toast_retire_failed'));
     }
   };
 
-  const fmt = (n: number) => new Intl.NumberFormat('id-ID', { maximumFractionDigits: 0 }).format(n);
+  const fmt = (n: number) => formatNumber(n, { maximumFractionDigits: 0 });
 
   const totalBalance = holdings.reduce((acc, h) => acc + h.balance, 0);
   const totalListed = holdings.reduce((acc, h) => acc + h.listed, 0);
@@ -76,44 +76,44 @@ export default function PortfolioPage() {
       {/* 3 KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Total Saldo Token Aktif</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kpi_total_active_balance')}</div>
           <div className="text-2xl font-black text-slate-900 tracking-tight">
             {fmt(totalBalance)} <span className="text-sm font-semibold text-slate-400">tCO2e</span>
           </div>
-          <div className="text-xs text-slate-400 mt-2">Dapat di-retire atau dijual</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kpi_total_active_sub')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Terkunci di Escrow (Listing)</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kpi_locked_escrow')}</div>
           <div className="text-2xl font-black text-amber-600 tracking-tight">
             {fmt(totalListed)} <span className="text-sm font-semibold text-slate-400">tCO2e</span>
           </div>
-          <div className="text-xs text-slate-400 mt-2">Sedang ditawarkan di marketplace</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kpi_locked_escrow_sub')}</div>
         </div>
 
         <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-soft">
-          <div className="text-xs font-semibold text-slate-500 mb-1">Total Karbon Diretire (Burn)</div>
+          <div className="text-xs font-semibold text-slate-500 mb-1">{t('kpi_retired_total')}</div>
           <div className="text-2xl font-black text-emerald-600 tracking-tight">
             {fmt(totalRetired)} <span className="text-sm font-semibold text-slate-400">tCO2e</span>
           </div>
-          <div className="text-xs text-slate-400 mt-2">Klaim kompensasi resmi on-chain</div>
+          <div className="text-xs text-slate-400 mt-2">{t('kpi_retired_sub')}</div>
         </div>
       </div>
 
       {/* Holdings Table */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-soft">
-        <h3 className="font-bold text-slate-900 mb-4">Portofolio Kepemilikan Token Karbon</h3>
+        <h3 className="font-bold text-slate-900 mb-4">{t('portfolio_table_title')}</h3>
         <div className="overflow-x-auto rounded-xl border border-slate-100">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Batch & Proyek</th>
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Standar</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Vintage</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Saldo Bebas</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Di Escrow</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Diretire</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Aksi</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_batch_project')}</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_standard')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_vintage')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_free_balance')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_in_escrow')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_retired_qty')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_action')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -135,16 +135,17 @@ export default function PortfolioPage() {
                   <td className="px-4 py-3 text-right">
                     {h.balance > 0 ? (
                       <button
+                        type="button"
                         onClick={() => {
                           setRetireTarget(h);
                           setRetireAmount(String(Math.min(h.balance, 50)));
                         }}
                         className="bg-emerald-50 text-emerald-700 border border-emerald-200 font-semibold text-xs px-3 py-1.5 rounded-lg hover:bg-emerald-100 transition"
                       >
-                        Retire (Burn)
+                        {t('btn_retire_action')}
                       </button>
                     ) : (
-                      <span className="text-xs text-slate-400">Saldo habis</span>
+                      <span className="text-xs text-slate-400">{t('badge_depleted')}</span>
                     )}
                   </td>
                 </tr>
@@ -156,17 +157,17 @@ export default function PortfolioPage() {
 
       {/* Certificates Table */}
       <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-soft">
-        <h3 className="font-bold text-slate-900 mb-4">Sertifikat Offset Karbon Resmi (ISO 14064)</h3>
+        <h3 className="font-bold text-slate-900 mb-4">{t('certificates_heading')}</h3>
         <div className="overflow-x-auto rounded-xl border border-slate-100">
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-100">
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">ID & Waktu</th>
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Penerima Manfaat</th>
-                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">Alasan Offset</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Jumlah</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_cert_id')}</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_beneficiary')}</th>
+                <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">{t('col_reason')}</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_remaining')}</th>
                 <th className="text-left px-4 py-3 text-xs font-bold text-slate-500">On-Chain Tx</th>
-                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">Dokumen</th>
+                <th className="text-right px-4 py-3 text-xs font-bold text-slate-500">{t('col_action')}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -174,7 +175,9 @@ export default function PortfolioPage() {
                 <tr key={c.id} className="hover:bg-slate-50/50 transition">
                   <td className="px-4 py-3">
                     <div className="font-semibold text-slate-900">Cert #{c.id}</div>
-                    <div className="text-xs text-slate-400">{c.time?.slice(0, 10)}</div>
+                    <div className="text-xs text-slate-400">
+                      {c.time ? formatDate(c.time.slice(0, 10)) : '-'}
+                    </div>
                   </td>
                   <td className="px-4 py-3 font-semibold text-slate-800">{c.beneficiary}</td>
                   <td className="px-4 py-3 text-slate-600 text-xs">{c.reason}</td>
@@ -188,7 +191,7 @@ export default function PortfolioPage() {
                       download={`cert-${c.id}.pdf`}
                       className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800"
                     >
-                      Unduh PDF ↗
+                      {t('btn_export_pdf')} ↗
                     </a>
                   </td>
                 </tr>
@@ -202,20 +205,18 @@ export default function PortfolioPage() {
       {retireTarget && (
         <div className="fixed inset-0 z-50 bg-slate-950/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-soft space-y-4">
-            <h3 className="font-bold text-slate-900 text-lg">Retire (Burn) Token Karbon</h3>
-            <p className="text-xs text-slate-500">
-              Membakar token secara permanen dari akun on-chain untuk mengklaim kompensasi emisi karbon perusahaan.
-            </p>
+            <h3 className="font-bold text-slate-900 text-lg">{t('modal_retire_title')}</h3>
+            <p className="text-xs text-slate-500">{t('modal_retire_desc')}</p>
 
             <form onSubmit={handleRetireSubmit} className="space-y-4">
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-100 text-xs">
                 <div className="text-slate-400">Token Batch:</div>
                 <div className="font-bold text-slate-900">{retireTarget.code} ({retireTarget.project})</div>
-                <div className="text-slate-500">Sisa saldo bebas: {fmt(retireTarget.balance)} tCO2e</div>
+                <div className="text-slate-500">{t('col_free_balance')}: {fmt(retireTarget.balance)} tCO2e</div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Jumlah Di-burn (tCO2e)</label>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">{t('modal_retire_amount')}</label>
                 <input
                   type="number"
                   max={retireTarget.balance}
@@ -226,7 +227,7 @@ export default function PortfolioPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Nama Penerima Manfaat</label>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">{t('modal_beneficiary')}</label>
                 <input
                   type="text"
                   value={beneficiary}
@@ -236,7 +237,7 @@ export default function PortfolioPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Alasan / Catatan Offset</label>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">{t('modal_reason')}</label>
                 <input
                   type="text"
                   value={reason}
@@ -251,13 +252,13 @@ export default function PortfolioPage() {
                   onClick={() => setRetireTarget(null)}
                   className="flex-1 bg-white border border-slate-200 text-slate-700 font-semibold text-xs px-4 py-2.5 rounded-xl hover:bg-slate-50"
                 >
-                  Batal
+                  {t('btn_cancel')}
                 </button>
                 <button
                   type="submit"
                   className="flex-1 bg-rose-600 text-white font-semibold text-xs px-4 py-2.5 rounded-xl hover:bg-rose-700"
                 >
-                  Konfirmasi Burn
+                  {t('btn_sign_retire')}
                 </button>
               </div>
             </form>
@@ -267,4 +268,3 @@ export default function PortfolioPage() {
     </div>
   );
 }
-

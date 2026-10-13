@@ -2,13 +2,14 @@
 
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { useI18n } from '../../lib/i18n';
 import { api } from '../../lib/api';
 import { useToast } from '../../components/Toast';
 import { RegistryBatch } from '../../types';
 
 function TokenizeWizardContent() {
-  const { t } = useI18n();
+  const { t, formatNumber } = useI18n();
   const { showToast } = useToast();
   const searchParams = useSearchParams();
   const paramBatch = searchParams.get('batch');
@@ -42,7 +43,7 @@ function TokenizeWizardContent() {
 
   const handleStartLock = async () => {
     if (!selectedBatch || numAmount <= 0 || numAmount > selectedBatch.remaining) {
-      showToast('Jumlah tidak valid atau melebihi sisa batch');
+      showToast(t('toast_lock_invalid'));
       return;
     }
 
@@ -52,16 +53,15 @@ function TokenizeWizardContent() {
       const res = await api.createLockJob(selectedBatchId, numAmount);
       setActiveJobId(res.jobId);
 
-      // Simulasikan polling progress
       setTimeout(async () => {
         setPhase('locked');
         setProgress(50);
-        showToast('Kredit karbon berhasil dikunci di registry!');
+        showToast(t('toast_lock_success'));
       }, 1500);
     } catch (err: any) {
       setPhase('idle');
       setProgress(0);
-      showToast(err.message || 'Gagal mengunci kredit');
+      showToast(err.message || t('toast_lock_failed'));
     }
   };
 
@@ -72,16 +72,15 @@ function TokenizeWizardContent() {
       setPhase('minting');
       setProgress(75);
 
-      // Panggil backend mint
       const mintRes = await api.processMint(activeJobId);
       setResult(mintRes.result);
       setPhase('minted');
       setProgress(100);
-      showToast('Token kredit karbon berhasil di-mint ke Solana!');
+      showToast(t('toast_mint_success'));
     } catch (err: any) {
       setPhase('locked');
       setProgress(50);
-      showToast(err.message || 'Gagal melakukan mint token');
+      showToast(err.message || t('toast_mint_failed'));
     }
   };
 
@@ -94,22 +93,20 @@ function TokenizeWizardContent() {
 
   const copyText = (txt: string) => {
     navigator.clipboard.writeText(txt);
-    showToast('Disalin ke clipboard!');
+    showToast(t('btn_copied'));
   };
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
-        <h2 className="text-2xl font-black text-slate-900 tracking-tight">Tokenisasi Kredit Karbon</h2>
-        <p className="text-sm text-slate-500">
-          Ubah kredit karbon terverifikasi menjadi token SPL di blockchain Solana dengan tanda tangan wallet
-        </p>
+        <h2 className="text-2xl font-black text-slate-900 tracking-tight">{t('tokenize_title')}</h2>
+        <p className="text-sm text-slate-500">{t('tokenize_sub')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Left Panel: Step Progression */}
         <div className="md:col-span-5 bg-white rounded-2xl border border-slate-200 p-6 shadow-soft space-y-6">
-          <h3 className="font-bold text-slate-900 text-sm">Alur On-Chain (2 Fase)</h3>
+          <h3 className="font-bold text-slate-900 text-sm">{t('flow_heading')}</h3>
 
           {/* Progress Bar */}
           <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
@@ -130,8 +127,8 @@ function TokenizeWizardContent() {
                 {progress > 25 ? '✓' : '1'}
               </div>
               <div>
-                <div className="font-semibold text-sm text-slate-900">Kunci di Registry</div>
-                <div className="text-xs text-slate-400">Verra / Gold Standard freeze kuota</div>
+                <div className="font-semibold text-sm text-slate-900">{t('step_1_title')}</div>
+                <div className="text-xs text-slate-400">{t('step_1_desc')}</div>
               </div>
             </div>
 
@@ -145,8 +142,8 @@ function TokenizeWizardContent() {
                 {progress > 50 ? '✓' : '2'}
               </div>
               <div>
-                <div className="font-semibold text-sm text-slate-900">Verifikasi Kunci Sah</div>
-                <div className="text-xs text-slate-400">Pemberian izin minting resmi</div>
+                <div className="font-semibold text-sm text-slate-900">{t('step_2_title')}</div>
+                <div className="text-xs text-slate-400">{t('step_2_desc')}</div>
               </div>
             </div>
 
@@ -160,8 +157,8 @@ function TokenizeWizardContent() {
                 {progress > 75 ? '✓' : '3'}
               </div>
               <div>
-                <div className="font-semibold text-sm text-slate-900">Tanda Tangan & Mint On-Chain</div>
-                <div className="text-xs text-slate-400">Instruksi SPL Token Minting</div>
+                <div className="font-semibold text-sm text-slate-900">{t('step_3_title')}</div>
+                <div className="text-xs text-slate-400">{t('step_3_desc')}</div>
               </div>
             </div>
 
@@ -175,8 +172,8 @@ function TokenizeWizardContent() {
                 {progress === 100 ? '✓' : '4'}
               </div>
               <div>
-                <div className="font-semibold text-sm text-slate-900">Selesai & Masuk Portofolio</div>
-                <div className="text-xs text-slate-400">Token tersimpan di akun token (ATA)</div>
+                <div className="font-semibold text-sm text-slate-900">{t('step_4_title')}</div>
+                <div className="text-xs text-slate-400">{t('step_4_desc')}</div>
               </div>
             </div>
           </div>
@@ -187,7 +184,7 @@ function TokenizeWizardContent() {
           {phase !== 'minted' ? (
             <div className="space-y-5">
               <div>
-                <label className="block text-xs font-semibold text-slate-500 mb-1">Pilih Batch Registry</label>
+                <label className="block text-xs font-semibold text-slate-500 mb-1">{t('select_batch_label')}</label>
                 <select
                   disabled={phase !== 'idle'}
                   value={selectedBatchId}
@@ -196,7 +193,7 @@ function TokenizeWizardContent() {
                 >
                   {batches.map((b) => (
                     <option key={b.id} value={b.id}>
-                      {b.project} ({b.id} · sisa {b.remaining} t)
+                      {b.project} ({b.id} · {t('col_remaining').toLowerCase()} {b.remaining} t)
                     </option>
                   ))}
                 </select>
@@ -204,8 +201,8 @@ function TokenizeWizardContent() {
 
               <div>
                 <div className="flex justify-between text-xs font-semibold text-slate-500 mb-1">
-                  <span>Jumlah Kredit (tCO2e)</span>
-                  <span>Tersedia: {selectedBatch?.remaining || 0} t</span>
+                  <span>{t('credit_amount_label')}</span>
+                  <span>{t('available_label')}: {selectedBatch?.remaining || 0} t</span>
                 </div>
                 <input
                   type="number"
@@ -217,48 +214,54 @@ function TokenizeWizardContent() {
               </div>
 
               <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 space-y-1 text-xs">
-                <div className="text-slate-500">Unit SPL Token On-Chain (3 desimal):</div>
+                <div className="text-slate-500">{t('spl_units_label')}</div>
                 <div className="text-lg font-black mono text-emerald-700">
-                  {new Intl.NumberFormat('id-ID').format(onChainUnits)} UNITS
+                  {formatNumber(onChainUnits, { maximumFractionDigits: 0 })} UNITS
                 </div>
-                <div className="text-slate-400">1 unit = 0.001 tCO2e (1 kg CO2e)</div>
+                <div className="text-slate-400">{t('spl_unit_ratio')}</div>
               </div>
 
               {/* Action Buttons */}
               <div className="pt-2">
                 {phase === 'idle' && (
                   <button
+                    type="button"
                     onClick={handleStartLock}
                     className="w-full bg-emerald-600 text-white font-semibold text-sm px-4 py-3 rounded-xl hover:bg-emerald-700 transition"
                   >
-                    Mulai Penguncian di Registry
+                    {t('btn_start_lock')}
                   </button>
                 )}
 
                 {phase === 'locking' && (
                   <button
+                    type="button"
                     disabled
                     className="w-full bg-slate-100 text-slate-400 font-semibold text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-2"
                   >
-                    <span className="spin dk" /> Mengunci kuota di registry…
+                    <span className="w-3.5 h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                    {t('btn_locking')}
                   </button>
                 )}
 
                 {phase === 'locked' && (
                   <button
+                    type="button"
                     onClick={handleStartMint}
                     className="w-full bg-emerald-600 text-white font-semibold text-sm px-4 py-3 rounded-xl hover:bg-emerald-700 transition shadow-sm"
                   >
-                    Tanda Tangani & Mint Token ke Solana
+                    {t('btn_sign_mint')}
                   </button>
                 )}
 
                 {phase === 'minting' && (
                   <button
+                    type="button"
                     disabled
                     className="w-full bg-slate-100 text-slate-400 font-semibold text-sm px-4 py-3 rounded-xl flex items-center justify-center gap-2"
                   >
-                    <span className="spin dk" /> Mengirim transaksi ke Solana…
+                    <span className="w-3.5 h-3.5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+                    {t('btn_minting')}
                   </button>
                 )}
               </div>
@@ -269,46 +272,46 @@ function TokenizeWizardContent() {
               <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-2xl">
                 ✓
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Token Berhasil Dicetak On-Chain!</h3>
-              <p className="text-xs text-slate-500">
-                Token kredit karbon SPL telah resmi diterbitkan ke ledger Solana.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t('mint_success_title')}</h3>
+              <p className="text-xs text-slate-500">{t('mint_success_sub')}</p>
 
-              <dl className="grid grid-cols-[100px_1fr] gap-y-2 text-xs p-4 rounded-xl bg-slate-50 border border-slate-100">
-                <dt className="text-slate-400">Mint Address</dt>
+              <dl className="grid grid-cols-[110px_1fr] gap-y-2 text-xs p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <dt className="text-slate-400">{t('label_mint_address')}</dt>
                 <dd className="mono truncate text-slate-800">{result?.mint}</dd>
 
-                <dt className="text-slate-400">Token Account</dt>
+                <dt className="text-slate-400">{t('label_token_account')}</dt>
                 <dd className="mono truncate text-slate-800">{result?.ata}</dd>
 
-                <dt className="text-slate-400">Signature</dt>
+                <dt className="text-slate-400">{t('label_signature')}</dt>
                 <dd className="mono break-all text-slate-800 flex items-center gap-2">
                   <span className="truncate">{result?.signature}</span>
                   <button
+                    type="button"
                     onClick={() => copyText(result?.signature)}
                     className="text-emerald-700 font-semibold shrink-0"
                   >
-                    Salin
+                    {t('btn_copy')}
                   </button>
                 </dd>
 
-                <dt className="text-slate-400">Solana Slot</dt>
+                <dt className="text-slate-400">{t('label_solana_slot')}</dt>
                 <dd className="mono font-bold text-slate-800">{result?.slot}</dd>
               </dl>
 
               <div className="flex gap-3 pt-2">
                 <button
+                  type="button"
                   onClick={handleReset}
                   className="flex-1 bg-white border border-slate-200 text-slate-700 font-semibold text-xs px-4 py-2.5 rounded-xl hover:bg-slate-50 transition"
                 >
-                  Tokenisasi Lagi
+                  {t('btn_tokenize_again')}
                 </button>
-                <a
+                <Link
                   href="/audit"
                   className="flex-1 bg-emerald-600 text-white font-semibold text-xs px-4 py-2.5 rounded-xl hover:bg-emerald-700 text-center transition"
                 >
-                  Buka di Audit Explorer →
-                </a>
+                  {t('btn_open_audit')}
+                </Link>
               </div>
             </div>
           )}
@@ -319,10 +322,11 @@ function TokenizeWizardContent() {
 }
 
 export default function TokenizeWizardPage() {
+  const { t } = useI18n();
+
   return (
-    <Suspense fallback={<div className="p-8 text-center text-slate-500">Memuat wizard tokenisasi...</div>}>
+    <Suspense fallback={<div className="p-8 text-center text-slate-500">{t('loading_tokenize')}</div>}>
       <TokenizeWizardContent />
     </Suspense>
   );
 }
-
